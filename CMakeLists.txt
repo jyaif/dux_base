@@ -12,3 +12,5 @@ add_executable(
 	src/scoped_lambda.cpp
 	src/stream.cpp
 )
+
+target_link_libraries(dux_base_test_bin pthread)

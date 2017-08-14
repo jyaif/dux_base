@@ -100,17 +100,20 @@ void TestStream() {
   }
 }
 
-void SomeThread(dux::ThreadChecker* thread_checker) {
+void SomeThread(std::pair<dux::ThreadChecker*, bool*> params) {
   dux::ThreadChecker thread_checker_2;
   assert(thread_checker_2.IsCreationThreadCurrent());
-  assert(!thread_checker->IsCreationThreadCurrent());
+  assert(!params.first->IsCreationThreadCurrent());
+  *params.second = true;
 }
 
 void TestThreadChecker() {
+  bool thread_ran = false;
   dux::ThreadChecker thread_checker;
   assert(thread_checker.IsCreationThreadCurrent());
-  std::thread t(SomeThread, &thread_checker);
+  std::thread t(SomeThread, std::pair<dux::ThreadChecker*, bool*>(&thread_checker, &thread_ran));
   t.join();
+  assert(thread_ran);
 }
 
 int main(int argc, char *argv[]) {

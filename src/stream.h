@@ -2,6 +2,7 @@
 #define DUX_BASE_SRC_STREAM_H_
 
 #include <cstdint>
+#include <memory>
 #include <vector>
 
 namespace dux {

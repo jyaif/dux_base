@@ -1,6 +1,7 @@
 #include "stream.h"
 
 #include <cassert>
+#include <cstddef>
 
 namespace dux {
 

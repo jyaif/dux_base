@@ -8,7 +8,7 @@ namespace dux {
 template <typename T>
 class BaseTypeWrapper {
  public:
-  explicit BaseTypeWrapper(T value) : value_(value){};
+  explicit BaseTypeWrapper(T value) : value_(value) {}
 
   constexpr BaseTypeWrapper operator+(const BaseTypeWrapper& o) const {
     BaseTypeWrapper v;

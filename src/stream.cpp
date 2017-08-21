@@ -69,7 +69,7 @@ IStream::IStream(std::vector<uint8_t> const& data) : current_index_(0) {
 IStream::IStream(uint8_t const* ptr, size_t size) : current_index_(0) {
   assert(ptr);
   data_ = std::make_unique<std::vector<uint8_t>>(size);
-  for (int i = 0; i < size; i++) {
+  for (size_t i = 0; i < size; i++) {
     (*data_)[i] = ptr[i];
   }
 }

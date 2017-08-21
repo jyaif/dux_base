@@ -42,14 +42,16 @@ class ObserverList {
     }                                                         \
   } while (0)
 
-  
 template <class ObserverType>
 class ThreadSafeObserverList {
-public:
+ public:
   // Add an observer to the list.  An observer should not be added to
   // the same list more than once.
-  void AddObserver(ObserverType* observer) { std::lock_guard<std::mutex> guard(list_mutex_); observers_.push_back(observer); }
-  
+  void AddObserver(ObserverType* observer) {
+    std::lock_guard<std::mutex> guard(list_mutex_);
+    observers_.push_back(observer);
+  }
+
   // Remove an observer from the list if it is in the list.
   void RemoveObserver(ObserverType* observer) {
     std::lock_guard<std::mutex> guard(list_mutex_);
@@ -62,9 +64,9 @@ public:
     }
     assert(false);
   }
-  
+
   bool IsEmpty() { return observers_.empty(); }
-  
+
   // A vector is used to keep the order of the observers deterministic.
   // Do not change to std::set.
   std::vector<ObserverType*> observers_;

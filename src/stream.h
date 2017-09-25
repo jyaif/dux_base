@@ -12,6 +12,7 @@ class OStream {
  public:
   void Write(void const* ptr, size_t byte_count);
   void Write(uint8_t const* ptr, size_t size);
+  void Write(bool value);
   void Write(int8_t value);
   void Write(uint8_t value);
   void Write(int16_t value);
@@ -33,6 +34,7 @@ class IStream {
   IStream(uint8_t const* ptr, size_t size);
 
   bool Read(void* ptr, size_t byte_count);
+  bool Read(bool& value);
   bool Read(int8_t& value);
   bool Read(uint8_t& value);
   bool Read(int16_t& value);

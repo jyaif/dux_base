@@ -20,6 +20,11 @@ void OStream::Write(uint8_t const* ptr, size_t size) {
   }
 }
 
+void OStream::Write(bool value) {
+  static_assert(sizeof(bool) == 1, "");
+  Write(&value, sizeof(value));
+}
+
 void OStream::Write(int8_t value) {
   Write(&value, sizeof(value));
 }
@@ -84,6 +89,11 @@ bool IStream::Read(void* ptr, size_t byte_count) {
     current_index_ += byte_count;
     return true;
   }
+}
+
+bool IStream::Read(bool& value) {
+  static_assert(sizeof(bool) == 1, "");
+  return Read(&value, sizeof(bool));
 }
 
 bool IStream::Read(int8_t& value) {

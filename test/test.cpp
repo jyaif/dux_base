@@ -83,10 +83,14 @@ void TestStream() {
     int16_t b = 0x3456;
     int64_t c = static_cast<int64_t>(0xABCDABCDABCDABCD);
     int8_t d = 0x78;
+    std::string s1 = "foo";
+    std::string s2 = "bar";
     ostream.Write(a);
     ostream.Write(b);
     ostream.Write(c);
     ostream.Write(d);
+    ostream.Write(s1);
+    ostream.Write(s2);
   }
   dux::IStream istream(ostream.Data());
   {
@@ -94,15 +98,21 @@ void TestStream() {
     int16_t b;
     int64_t c;
     int8_t d;
+    std::string s1;
+    std::string s2;
     bool success = true;
     istream.SkipBytes(1);
     success &= istream.Read(b);
     success &= istream.Read(c);
     success &= istream.Read(d);
+    success &= istream.Read(s1);
+    success &= istream.Read(s2);
     assert(success);
     assert(b == 0x3456);
     assert(c == static_cast<int64_t>(0xABCDABCDABCDABCD));
     assert(d == 0x78);
+    assert(s1 == "foo");
+    assert(s2 == "bar");
     success &= istream.Read(a);
     assert(!success);
   }

@@ -57,6 +57,12 @@ void OStream::Write(uint64_t value) {
   Write(&value, sizeof(value));
 }
 
+void OStream::Write(std::string const& string) {
+  uint32_t size = string.size();
+  Write(size);
+  Write(string.data(), string.length());
+}
+
 std::vector<uint8_t> const& OStream::Data() const {
   return data_;
 }
@@ -125,6 +131,18 @@ bool IStream::Read(int64_t& value) {
 
 bool IStream::Read(uint64_t& value) {
   return Read(&value, sizeof(uint64_t));
+}
+
+bool IStream::Read(std::string& value) {
+  uint32_t size;
+  if (Read(size)) {
+    uint8_t buffer[size];
+    if (Read(buffer, size)) {
+      value = std::string(buffer, buffer + size);
+      return true;
+    }
+  }
+  return false;
 }
 
 bool IStream::SkipBytes(size_t byte_count) {

@@ -5,6 +5,7 @@
 #include <cstring>
 #include <memory>
 #include <vector>
+#include <string>
 
 namespace dux {
 
@@ -21,6 +22,8 @@ class OStream {
   void Write(uint32_t value);
   void Write(int64_t value);
   void Write(uint64_t value);
+  void Write(std::string const& string);
+
   std::vector<uint8_t> const& Data() const;
 
  private:
@@ -43,6 +46,7 @@ class IStream {
   bool Read(uint32_t& value);
   bool Read(int64_t& value);
   bool Read(uint64_t& value);
+  bool Read(std::string& value);
 
   bool SkipBytes(size_t byte_count);
 

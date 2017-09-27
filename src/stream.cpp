@@ -12,7 +12,6 @@ void OStream::Write(void const* ptr, size_t byte_count) {
 
 void OStream::Write(uint8_t const* ptr, size_t size) {
   assert(ptr);
-  assert(size);
   while (size) {
     data_.push_back(*ptr);
     ptr++;

@@ -7,6 +7,7 @@
 #include "observer_list.h"
 #include "scoped_lambda.h"
 #include "stream.h"
+#include "task_runner.h"
 #include "thread_checker.h"
 
 void TestBaseTypeWrapper();
@@ -135,6 +136,21 @@ void TestThreadChecker() {
   assert(thread_ran);
 }
 
+void TestTaskRunner() {
+  int task1_ran_count = 0;
+  int task2_ran_count = 0;
+  dux::TaskRunner task_runner;
+  task_runner.RunLoop();
+  assert(task1_ran_count == 0 && task2_ran_count == 0);
+  task_runner.PostTask([&task1_ran_count]() { task1_ran_count++; });
+  task_runner.PostTask([&task2_ran_count]() { task2_ran_count++; }, 100000);
+  assert(task1_ran_count == 0 && task2_ran_count == 0);
+  task_runner.RunLoop();
+  assert(task1_ran_count == 1 && task2_ran_count == 0);
+  task_runner.RunLoop();
+  assert(task1_ran_count == 1 && task2_ran_count == 0);
+}
+
 int main(int argc, char* argv[]) {
   (void)argc;
   (void)argv;
@@ -144,6 +160,7 @@ int main(int argc, char* argv[]) {
   TestScopedLambda();
   TestStream();
   TestThreadChecker();
+  TestTaskRunner();
   printf("tests successfully passed\n");
   return EXIT_SUCCESS;
 }

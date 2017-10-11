@@ -11,6 +11,7 @@ add_executable(
 	test/test.cpp
 	src/scoped_lambda.cpp
 	src/stream.cpp
+	src/task_runner.cpp
 	src/timer.cpp
 )
 

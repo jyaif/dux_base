@@ -139,16 +139,22 @@ void TestThreadChecker() {
 void TestTaskRunner() {
   int task1_ran_count = 0;
   int task2_ran_count = 0;
+  int task3_ran_count = 0;
   dux::TaskRunner task_runner;
   task_runner.RunLoop();
-  assert(task1_ran_count == 0 && task2_ran_count == 0);
+  assert(task1_ran_count == 0 && task2_ran_count == 0 && task3_ran_count == 0);
   task_runner.PostTask([&task1_ran_count]() { task1_ran_count++; });
   task_runner.PostTask([&task2_ran_count]() { task2_ran_count++; }, 100000);
-  assert(task1_ran_count == 0 && task2_ran_count == 0);
+  task_runner.PostTask([&task_runner, &task3_ran_count]() {
+    task_runner.PostTask([&task3_ran_count]() { task3_ran_count++; });
+  });
+  assert(task1_ran_count == 0 && task2_ran_count == 0 && task3_ran_count == 0);
   task_runner.RunLoop();
-  assert(task1_ran_count == 1 && task2_ran_count == 0);
+  assert(task1_ran_count == 1 && task2_ran_count == 0 && task3_ran_count == 0);
   task_runner.RunLoop();
-  assert(task1_ran_count == 1 && task2_ran_count == 0);
+  assert(task1_ran_count == 1 && task2_ran_count == 0 && task3_ran_count == 1);
+  task_runner.RunLoop();
+  assert(task1_ran_count == 1 && task2_ran_count == 0 && task3_ran_count == 1);
 }
 
 int main(int argc, char* argv[]) {

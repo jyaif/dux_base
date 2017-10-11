@@ -135,6 +135,9 @@ bool IStream::Read(uint64_t& value) {
 bool IStream::Read(std::string& value) {
   uint32_t size;
   if (Read(size)) {
+    if (size > 32000) {
+      return false;
+    }
     uint8_t buffer[size];
     if (Read(buffer, size)) {
       value = std::string(buffer, buffer + size);

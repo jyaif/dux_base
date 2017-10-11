@@ -3,12 +3,12 @@
 
 #include <chrono>
 #include <functional>
+#include <mutex>
 #include <vector>
 
 namespace dux {
 
 using Task = std::function<void(void)>;
-
 using TimeStamp = std::chrono::time_point<std::chrono::high_resolution_clock>;
 
 class TaskWithTimeStamp {
@@ -24,7 +24,9 @@ class TaskRunner {
   void PostTask(Task const& task);
   void PostTask(Task const& task, int64_t ms);
 
+ private:
   std::vector<TaskWithTimeStamp> timed_tasks_;
+  std::mutex tasks_mutex_;
 };
 
 }  // namespace dux

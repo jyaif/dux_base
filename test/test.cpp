@@ -9,6 +9,7 @@
 #include "stream.h"
 #include "task_runner.h"
 #include "thread_checker.h"
+#include "weak_ptr_factory.h"
 
 void TestBaseTypeWrapper();
 void TestMix();
@@ -17,6 +18,7 @@ void TestScopedLambda();
 void TestStream();
 void SomeThread(std::pair<dux::ThreadChecker*, bool*> params);
 void TestThreadChecker();
+void TestWeakPtrFactory();
 
 void TestBaseTypeWrapper() {
   dux::BaseTypeWrapper<int64_t> v(10);
@@ -157,6 +159,23 @@ void TestTaskRunner() {
   assert(task1_ran_count == 1 && task2_ran_count == 0 && task3_ran_count == 1);
 }
 
+void TestWeakPtrFactory() {
+  int a = 43;
+
+  auto f1 = std::make_unique<dux::WeakPtrFactory<int>>(&a);
+  dux::WeakPtr<int> w1 = f1->GetWeak();
+  assert(w1.Get());
+  assert(*w1.Get() == 43);
+  a = 44;
+  assert(*w1.Get() == 44);
+  dux::WeakPtr<int> w2 = f1->GetWeak();
+  assert(*w2.Get() == 44);
+
+  f1.reset();
+  assert(w1.Get() == nullptr);
+  assert(w2.Get() == nullptr);
+}
+
 int main(int argc, char* argv[]) {
   (void)argc;
   (void)argv;
@@ -167,6 +186,7 @@ int main(int argc, char* argv[]) {
   TestStream();
   TestThreadChecker();
   TestTaskRunner();
+  TestWeakPtrFactory();
   printf("tests successfully passed\n");
   return EXIT_SUCCESS;
 }

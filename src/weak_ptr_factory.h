@@ -10,7 +10,7 @@ class WeakPtr {
  public:
   WeakPtr(std::weak_ptr<std::unique_ptr<T>> ptr) : ptr_(ptr){};
 
-  T* Get() {
+  T* Get() const {
     auto v = ptr_.lock();
     if (v)
       return v->get();

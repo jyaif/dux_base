@@ -25,6 +25,10 @@ void TestBaseTypeWrapper() {
   assert(v.value_ == 10);
   ++v;
   assert(v.value_ == 11);
+  v+=10;
+  assert(v.value_ == 21);
+  v-=20;
+  assert(v.value_ == 1);
 }
 
 void TestMix() {

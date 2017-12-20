@@ -55,11 +55,17 @@ class BaseTypeWrapper {
   }
 
   template <typename U>
-  void operator+=(const U v) const {
+  void operator+=(const U v) {
     static_assert(std::is_integral<U>::value, "Integer required.");
-    return value_ += v;
+    value_ += v;
   }
 
+  template <typename U>
+  void operator-=(const U v) {
+    static_assert(std::is_integral<U>::value, "Integer required.");
+    value_ -= v;
+  }
+  
   T value_;
 };
 

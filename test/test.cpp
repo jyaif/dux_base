@@ -11,6 +11,8 @@
 #include "thread_checker.h"
 #include "weak_ptr_factory.h"
 
+#include "value_test.h"
+
 void TestBaseTypeWrapper();
 void TestMix();
 void TestObserverList();
@@ -25,9 +27,9 @@ void TestBaseTypeWrapper() {
   assert(v.value_ == 10);
   ++v;
   assert(v.value_ == 11);
-  v+=10;
+  v += 10;
   assert(v.value_ == 21);
-  v-=20;
+  v -= 20;
   assert(v.value_ == 1);
 }
 
@@ -109,11 +111,13 @@ void TestStream() {
     std::string s2;
     bool success = true;
     istream.SkipBytes(1);
+    assert(!istream.IsAtEnd());
     success &= istream.Read(b);
     success &= istream.Read(c);
     success &= istream.Read(d);
     success &= istream.Read(s1);
     success &= istream.Read(s2);
+    assert(istream.IsAtEnd());
     assert(success);
     assert(b == 0x3456);
     assert(c == static_cast<int64_t>(0xABCDABCDABCDABCD));
@@ -191,6 +195,7 @@ int main(int argc, char* argv[]) {
   TestThreadChecker();
   TestTaskRunner();
   TestWeakPtrFactory();
+  TestValue();
   printf("tests successfully passed\n");
   return EXIT_SUCCESS;
 }

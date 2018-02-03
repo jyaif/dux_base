@@ -9,10 +9,13 @@ set(CMAKE_CXX_FLAGS "-std=c++14 -Werror")
 add_executable(
 	dux_base_test_bin
 	test/test.cpp
+	test/value_test.cpp
 	src/scoped_lambda.cpp
 	src/stream.cpp
 	src/task_runner.cpp
 	src/timer.cpp
+	src/value.cpp
+	src/value_serialization.cpp
 )
 
 target_link_libraries(dux_base_test_bin pthread)

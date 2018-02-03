@@ -65,7 +65,7 @@ class BaseTypeWrapper {
     static_assert(std::is_integral<U>::value, "Integer required.");
     value_ -= v;
   }
-  
+
   T value_;
 };
 

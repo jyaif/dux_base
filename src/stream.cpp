@@ -56,6 +56,10 @@ void OStream::Write(uint64_t value) {
   Write(&value, sizeof(value));
 }
 
+void OStream::Write(double value) {
+  Write(&value, sizeof(value));
+}
+
 void OStream::Write(std::string const& string) {
   uint32_t size = string.size();
   Write(size);
@@ -132,6 +136,10 @@ bool IStream::Read(uint64_t& value) {
   return Read(&value, sizeof(uint64_t));
 }
 
+bool IStream::Read(double& value) {
+  return Read(&value, sizeof(double));
+}
+
 bool IStream::Read(std::string& value) {
   uint32_t size;
   if (Read(size)) {
@@ -153,6 +161,10 @@ bool IStream::SkipBytes(size_t byte_count) {
   }
   current_index_ += byte_count;
   return true;
+}
+
+bool IStream::IsAtEnd() {
+  return current_index_ == data_->size();
 }
 
 }  // namespace dux

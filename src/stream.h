@@ -22,6 +22,7 @@ class OStream {
   void Write(uint32_t value);
   void Write(int64_t value);
   void Write(uint64_t value);
+  void Write(double value);
   void Write(std::string const& string);
 
   std::vector<uint8_t> const& Data() const;
@@ -46,9 +47,12 @@ class IStream {
   bool Read(uint32_t& value);
   bool Read(int64_t& value);
   bool Read(uint64_t& value);
+  bool Read(double& value);
   bool Read(std::string& value);
 
   bool SkipBytes(size_t byte_count);
+
+  bool IsAtEnd();
 
  private:
   std::unique_ptr<std::vector<uint8_t>> data_;

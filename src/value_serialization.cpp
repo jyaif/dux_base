@@ -5,7 +5,7 @@
 namespace dux {
 
 void WriteValueToStream(Value const& value, dux::OStream& s) {
-  uint8_t type = static_cast<uint8_t>(value.GetType());
+  int8_t type = static_cast<int8_t>(value.GetType());
   s.Write(type);
   switch (value.GetType()) {
     case Value::Type::NONE:
@@ -14,7 +14,7 @@ void WriteValueToStream(Value const& value, dux::OStream& s) {
       s.Write(value.GetBool());
       break;
     case Value::Type::INTEGER:
-      s.Write(value.GetInt());
+      s.Write(value.GetInteger());
       break;
     case Value::Type::DOUBLE:
       s.Write(value.GetDouble());
@@ -44,10 +44,10 @@ void WriteValueToStream(Value const& value, dux::OStream& s) {
   }
 }
 
-std::unique_ptr<std::vector<uint8_t>> Serialize(Value const& value) {
+std::unique_ptr<std::vector<int8_t>> Serialize(Value const& value) {
   dux::OStream s;
-  std::unique_ptr<std::vector<uint8_t>> data =
-      std::make_unique<std::vector<uint8_t>>();
+  std::unique_ptr<std::vector<int8_t>> data =
+      std::make_unique<std::vector<int8_t>>();
   WriteValueToStream(value, s);
   // TODO: avoid the copy
   *data = s.Data();
@@ -55,7 +55,7 @@ std::unique_ptr<std::vector<uint8_t>> Serialize(Value const& value) {
 }
 
 std::unique_ptr<Value> ReadValueFromStream(dux::IStream& stream) {
-  uint8_t t;
+  int8_t t;
   if (stream.Read(t)) {
     Value::Type type = static_cast<Value::Type>(t);
     switch (type) {
@@ -125,7 +125,7 @@ std::unique_ptr<Value> ReadValueFromStream(dux::IStream& stream) {
   return std::unique_ptr<Value>();
 }
 
-std::unique_ptr<Value> Deserialize(std::unique_ptr<std::vector<uint8_t>> data) {
+std::unique_ptr<Value> Deserialize(std::unique_ptr<std::vector<int8_t>> data) {
   dux::IStream s(std::move(data));
   auto v = ReadValueFromStream(s);
   if (s.IsAtEnd())

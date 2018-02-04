@@ -76,15 +76,15 @@ bool Value::GetBool() const {
   return bool_value_;
 }
 
-int64_t Value::GetInt() const {
-  assert(IsInt());
+int64_t Value::GetInteger() const {
+  assert(IsInteger());
   return int_value_;
 }
 
 double Value::GetDouble() const {
   if (IsDouble())
     return double_value_;
-  if (IsInt())
+  if (IsInteger())
     return int_value_;
   assert(false);
   return 0.0;

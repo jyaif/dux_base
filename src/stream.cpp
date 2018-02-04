@@ -7,10 +7,10 @@ namespace dux {
 
 void OStream::Write(void const* ptr, size_t byte_count) {
   assert(ptr);
-  Write(static_cast<uint8_t const*>(ptr), byte_count);
+  Write(static_cast<int8_t const*>(ptr), byte_count);
 }
 
-void OStream::Write(uint8_t const* ptr, size_t size) {
+void OStream::Write(int8_t const* ptr, size_t size) {
   assert(ptr);
   while (size) {
     data_.push_back(*ptr);
@@ -66,23 +66,23 @@ void OStream::Write(std::string const& string) {
   Write(string.data(), string.length());
 }
 
-std::vector<uint8_t> const& OStream::Data() const {
+std::vector<int8_t> const& OStream::Data() const {
   return data_;
 }
 
-IStream::IStream(std::unique_ptr<std::vector<uint8_t>> data)
+IStream::IStream(std::unique_ptr<std::vector<int8_t>> data)
     : data_(std::move(data)), current_index_(0) {
   assert(data_);
 }
 
-IStream::IStream(std::vector<uint8_t> const& data) : current_index_(0) {
-  data_ = std::make_unique<std::vector<uint8_t>>();
+IStream::IStream(std::vector<int8_t> const& data) : current_index_(0) {
+  data_ = std::make_unique<std::vector<int8_t>>();
   *data_ = data;
 }
 
-IStream::IStream(uint8_t const* ptr, size_t size) : current_index_(0) {
+IStream::IStream(int8_t const* ptr, size_t size) : current_index_(0) {
   assert(ptr);
-  data_ = std::make_unique<std::vector<uint8_t>>(size);
+  data_ = std::make_unique<std::vector<int8_t>>(size);
   for (size_t i = 0; i < size; i++) {
     (*data_)[i] = ptr[i];
   }
@@ -146,7 +146,7 @@ bool IStream::Read(std::string& value) {
     if (size > 32000) {
       return false;
     }
-    uint8_t buffer[size];
+    int8_t buffer[size];
     if (Read(buffer, size)) {
       value = std::string(buffer, buffer + size);
       return true;

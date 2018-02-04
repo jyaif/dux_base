@@ -37,14 +37,14 @@ class Value {
 
   bool IsNone() const { return GetType() == Type::NONE; }
   bool IsBool() const { return GetType() == Type::BOOLEAN; }
-  bool IsInt() const { return GetType() == Type::INTEGER; }
+  bool IsInteger() const { return GetType() == Type::INTEGER; }
   bool IsDouble() const { return GetType() == Type::DOUBLE; }
   bool IsString() const { return GetType() == Type::STRING; }
   bool IsDictionary() const { return GetType() == Type::DICTIONARY; }
   bool IsList() const { return GetType() == Type::LIST; }
 
   bool GetBool() const;
-  int64_t GetInt() const;
+  int64_t GetInteger() const;
   double GetDouble() const;
   const std::string& GetString() const;
   ListStorage& GetList();

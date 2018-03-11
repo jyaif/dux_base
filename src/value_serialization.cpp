@@ -13,9 +13,6 @@ void WriteValueToStream(Value const& value, dux::OStream& s) {
     case Value::Type::BOOLEAN:
       s.Write(value.GetBool());
       break;
-    case Value::Type::INTEGER:
-      s.Write(value.GetInteger());
-      break;
     case Value::Type::DOUBLE:
       s.Write(value.GetDouble());
       break;
@@ -67,13 +64,6 @@ std::unique_ptr<Value> ReadValueFromStream(dux::IStream& stream) {
           break;
         }
         return std::make_unique<Value>(b);
-      }
-      case Value::Type::INTEGER: {
-        int64_t i;
-        if (!stream.Read(i)) {
-          break;
-        }
-        return std::make_unique<Value>(i);
       }
       case Value::Type::DOUBLE: {
         double d;

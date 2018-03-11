@@ -11,9 +11,6 @@ Value::Value(Type type) : type_(type) {
     case Type::BOOLEAN:
       bool_value_ = false;
       return;
-    case Type::INTEGER:
-      int_value_ = 0;
-      return;
     case Type::DOUBLE:
       double_value_ = 0.0;
       return;
@@ -31,7 +28,9 @@ Value::Value(Type type) : type_(type) {
 
 Value::Value(bool in_bool) : type_(Type::BOOLEAN), bool_value_(in_bool) {}
 
-Value::Value(int64_t in_int) : type_(Type::INTEGER), int_value_(in_int) {}
+Value::Value(int32_t in_int) : type_(Type::DOUBLE), double_value_(in_int) {}
+
+Value::Value(int64_t in_int) : type_(Type::DOUBLE), double_value_(in_int) {}
 
 Value::Value(double in_double)
     : type_(Type::DOUBLE), double_value_(in_double) {}
@@ -50,9 +49,6 @@ Value::Value(Value&& other) {
       return;
     case Type::BOOLEAN:
       bool_value_ = other.bool_value_;
-      return;
-    case Type::INTEGER:
-      int_value_ = other.int_value_;
       return;
     case Type::DOUBLE:
       double_value_ = other.double_value_;
@@ -76,16 +72,9 @@ bool Value::GetBool() const {
   return bool_value_;
 }
 
-int64_t Value::GetInteger() const {
-  assert(IsInteger());
-  return int_value_;
-}
-
 double Value::GetDouble() const {
   if (IsDouble())
     return double_value_;
-  if (IsInteger())
-    return int_value_;
   assert(false);
   return 0.0;
 }

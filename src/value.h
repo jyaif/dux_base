@@ -17,7 +17,6 @@ class Value {
   enum class Type : uint8_t {
     NONE = 0,
     BOOLEAN,
-    INTEGER,
     DOUBLE,
     STRING,
     DICTIONARY,
@@ -26,6 +25,7 @@ class Value {
 
   explicit Value(Type type);
   explicit Value(bool in_bool);
+  explicit Value(int32_t in_int);
   explicit Value(int64_t in_int);
   explicit Value(double in_double);
   explicit Value(std::string const& in_string);
@@ -37,14 +37,12 @@ class Value {
 
   bool IsNone() const { return GetType() == Type::NONE; }
   bool IsBool() const { return GetType() == Type::BOOLEAN; }
-  bool IsInteger() const { return GetType() == Type::INTEGER; }
   bool IsDouble() const { return GetType() == Type::DOUBLE; }
   bool IsString() const { return GetType() == Type::STRING; }
   bool IsDictionary() const { return GetType() == Type::DICTIONARY; }
   bool IsList() const { return GetType() == Type::LIST; }
 
   bool GetBool() const;
-  int64_t GetInteger() const;
   double GetDouble() const;
   const std::string& GetString() const;
   ListStorage& GetList();
@@ -62,7 +60,6 @@ class Value {
   Type type_;
   union {
     bool bool_value_;
-    int64_t int_value_;
     double double_value_;
     std::string string_value_;
     DictionaryStorage dictionary_;

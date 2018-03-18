@@ -9,14 +9,11 @@
 void TestValue() {
   dux::Value v0(true);
   assert(v0.IsBool());
-  assert(!v0.IsInteger());
   assert(v0.GetBool() == true);
 
   dux::Value v1(static_cast<int64_t>(32));
-  assert(v1.IsInteger());
   assert(!v1.IsBool());
-  assert(!v1.IsDouble());
-  assert(v1.GetInteger() == 32);
+  assert(v1.IsDouble());
   assert(v1.GetDouble() == 32);
 
   dux::Value v2(dux::Value::Type::STRING);

@@ -39,6 +39,6 @@ class AverageTimer {
   size_t iterations_;
   Timer timer_;
 };
-}
+}  // namespace dux
 
 #endif  // DUX_BASE_SRC_TIMER_H_

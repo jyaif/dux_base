@@ -3,6 +3,7 @@
 #include <thread>
 
 #include "base_type_wrapper.h"
+#include "fps_counter.h"
 #include "mix.h"
 #include "observer_list.h"
 #include "scoped_lambda.h"
@@ -184,6 +185,15 @@ void TestWeakPtrFactory() {
   assert(w2.Get() == nullptr);
 }
 
+void TestFPSCounter() {
+  dux::FPSCounter f;
+  assert(f.GetFPS() == 0);
+  f.Update();
+  f.Update();
+  f.Update();
+  assert(f.GetFPS() == 0);
+}
+
 int main(int argc, char* argv[]) {
   (void)argc;
   (void)argv;
@@ -195,6 +205,7 @@ int main(int argc, char* argv[]) {
   TestThreadChecker();
   TestTaskRunner();
   TestWeakPtrFactory();
+  TestFPSCounter();
   TestValue();
   printf("tests successfully passed\n");
   return EXIT_SUCCESS;

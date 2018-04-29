@@ -84,4 +84,4 @@ void AverageTimer::Stop() {
     index_ = 0;
   }
 }
-}
+}  // namespace dux

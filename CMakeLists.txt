@@ -10,6 +10,7 @@ add_executable(
 	dux_base_test_bin
 	test/test.cpp
 	test/value_test.cpp
+	src/fps_counter.cpp
 	src/scoped_lambda.cpp
 	src/stream.cpp
 	src/task_runner.cpp

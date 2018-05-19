@@ -33,7 +33,6 @@ class OStream {
 
 class IStream {
  public:
-  IStream(std::unique_ptr<std::vector<int8_t>> data);
   IStream(std::vector<int8_t> const& data);
   IStream(int8_t const* ptr, size_t size);
 
@@ -55,7 +54,8 @@ class IStream {
   bool IsAtEnd();
 
  private:
-  std::unique_ptr<std::vector<int8_t>> data_;
+  int8_t const* ptr_;
+  size_t size_;
   size_t current_index_;
 };
 

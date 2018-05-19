@@ -41,14 +41,10 @@ void WriteValueToStream(Value const& value, dux::OStream& s) {
   }
 }
 
-std::unique_ptr<std::vector<int8_t>> Serialize(Value const& value) {
+std::vector<int8_t> Serialize(Value const& value) {
   dux::OStream s;
-  std::unique_ptr<std::vector<int8_t>> data =
-      std::make_unique<std::vector<int8_t>>();
   WriteValueToStream(value, s);
-  // TODO: avoid the copy
-  *data = s.Data();
-  return data;
+  return s.Data();
 }
 
 std::unique_ptr<Value> ReadValueFromStream(dux::IStream& stream) {
@@ -115,7 +111,7 @@ std::unique_ptr<Value> ReadValueFromStream(dux::IStream& stream) {
   return std::unique_ptr<Value>();
 }
 
-std::unique_ptr<Value> Deserialize(std::unique_ptr<std::vector<int8_t>> data) {
+std::unique_ptr<Value> Deserialize(std::vector<int8_t> data) {
   dux::IStream s(std::move(data));
   auto v = ReadValueFromStream(s);
   if (s.IsAtEnd())

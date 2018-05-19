@@ -70,31 +70,21 @@ std::vector<int8_t> const& OStream::Data() const {
   return data_;
 }
 
-IStream::IStream(std::unique_ptr<std::vector<int8_t>> data)
-    : data_(std::move(data)), current_index_(0) {
-  assert(data_);
-}
+IStream::IStream(std::vector<int8_t> const& data)
+    : ptr_(data.data()), size_(data.size()), current_index_(0) {}
 
-IStream::IStream(std::vector<int8_t> const& data) : current_index_(0) {
-  data_ = std::make_unique<std::vector<int8_t>>();
-  *data_ = data;
-}
-
-IStream::IStream(int8_t const* ptr, size_t size) : current_index_(0) {
+IStream::IStream(int8_t const* ptr, size_t size)
+    : ptr_(ptr), size_(size), current_index_(0) {
   assert(ptr);
-  data_ = std::make_unique<std::vector<int8_t>>(size);
-  for (size_t i = 0; i < size; i++) {
-    (*data_)[i] = ptr[i];
-  }
 }
 
 bool IStream::Read(void* ptr, size_t byte_count) {
   assert(ptr);
-  if (current_index_ + byte_count > data_->size()) {
+  if (current_index_ + byte_count > size_) {
     memset(ptr, 0, byte_count);
     return false;
   } else {
-    memcpy(ptr, &((*data_)[current_index_]), byte_count);
+    memcpy(ptr, ptr_ + current_index_, byte_count);
     current_index_ += byte_count;
     return true;
   }
@@ -156,7 +146,7 @@ bool IStream::Read(std::string& value) {
 }
 
 bool IStream::SkipBytes(size_t byte_count) {
-  if (current_index_ + byte_count > data_->size()) {
+  if (current_index_ + byte_count > size_) {
     return false;
   }
   current_index_ += byte_count;
@@ -164,7 +154,7 @@ bool IStream::SkipBytes(size_t byte_count) {
 }
 
 bool IStream::IsAtEnd() {
-  return current_index_ == data_->size();
+  return current_index_ == size_;
 }
 
 }  // namespace dux

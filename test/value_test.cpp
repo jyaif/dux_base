@@ -34,8 +34,7 @@ void TestValue() {
          "value1");
 
   auto serialization1 = dux::Serialize(v4);
-  assert(serialization1);
-  auto v5 = dux::Deserialize(std::move(serialization1));
+  auto v5 = dux::Deserialize(serialization1);
   assert(v5);
   assert(v5->FindKeyOfType("key1", dux::Value::Type::STRING)->GetString() ==
          "value1");
@@ -45,8 +44,7 @@ void TestValue() {
   l.push_back(std::make_unique<dux::Value>(43.32));
   l.push_back(std::move(v5));
   auto serialization2 = dux::Serialize(v6);
-  assert(serialization2);
-  auto v7 = dux::Deserialize(std::move(serialization2));
+  auto v7 = dux::Deserialize(serialization2);
   auto& l2 = v7->GetList();
   assert(l2.size() == 2);
   assert(l2[0]->IsDouble());

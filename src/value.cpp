@@ -110,6 +110,7 @@ Value* Value::FindKeyOfType(std::string const& key, Type type) {
 }
 
 const Value* Value::FindKeyOfType(std::string const& key, Type type) const {
+  assert(IsDictionary());
   auto it = dictionary_.find(key);
   if (it == dictionary_.end())
     return nullptr;

@@ -11,6 +11,7 @@ add_executable(
 	test/test.cpp
 	test/value_test.cpp
 	src/fps_counter.cpp
+	src/interpolate.cpp
 	src/scoped_lambda.cpp
 	src/stream.cpp
 	src/task_runner.cpp

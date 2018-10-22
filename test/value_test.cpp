@@ -13,8 +13,8 @@ void TestValue() {
 
   dux::Value v1(static_cast<int64_t>(32));
   assert(!v1.IsBool());
-  assert(v1.IsDouble());
-  assert(v1.GetDouble() == 32);
+  assert(v1.IsInt64());
+  assert(v1.GetInt64() == 32);
 
   dux::Value v2(dux::Value::Type::STRING);
   assert(v2.IsString());
@@ -41,14 +41,14 @@ void TestValue() {
 
   dux::Value v6(dux::Value::Type::LIST);
   auto& l = v6.GetList();
-  l.push_back(std::make_unique<dux::Value>(43.32));
+  l.push_back(std::make_unique<dux::Value>(43));
   l.push_back(std::move(v5));
   auto serialization2 = dux::Serialize(v6);
   auto v7 = dux::Deserialize(serialization2);
   auto& l2 = v7->GetList();
   assert(l2.size() == 2);
-  assert(l2[0]->IsDouble());
-  assert(l2[0]->GetDouble() == 43.32);
+  assert(l2[0]->IsInt64());
+  assert(l2[0]->GetInt64() == 43);
   assert(l2[1]->IsDictionary());
   assert(l2[1]->FindKeyOfType("key1", dux::Value::Type::STRING)->GetString() ==
          "value1");

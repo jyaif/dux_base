@@ -11,8 +11,8 @@ Value::Value(Type type) : type_(type) {
     case Type::BOOLEAN:
       bool_value_ = false;
       return;
-    case Type::DOUBLE:
-      double_value_ = 0.0;
+    case Type::INT64:
+      int64_value_ = 0;
       return;
     case Type::STRING:
       new (&string_value_) std::string();
@@ -28,12 +28,9 @@ Value::Value(Type type) : type_(type) {
 
 Value::Value(bool in_bool) : type_(Type::BOOLEAN), bool_value_(in_bool) {}
 
-Value::Value(int32_t in_int) : type_(Type::DOUBLE), double_value_(in_int) {}
+Value::Value(int32_t in_int) : type_(Type::INT64), int64_value_(in_int) {}
 
-Value::Value(int64_t in_int) : type_(Type::DOUBLE), double_value_(in_int) {}
-
-Value::Value(double in_double)
-    : type_(Type::DOUBLE), double_value_(in_double) {}
+Value::Value(int64_t in_int) : type_(Type::INT64), int64_value_(in_int) {}
 
 Value::Value(std::string const& in_string)
     : type_(Type::STRING), string_value_(in_string) {}
@@ -50,8 +47,8 @@ Value::Value(Value&& other) {
     case Type::BOOLEAN:
       bool_value_ = other.bool_value_;
       return;
-    case Type::DOUBLE:
-      double_value_ = other.double_value_;
+    case Type::INT64:
+      int64_value_ = other.int64_value_;
       return;
     case Type::STRING:
       new (&string_value_) std::string(std::move(other.string_value_));
@@ -72,11 +69,11 @@ bool Value::GetBool() const {
   return bool_value_;
 }
 
-double Value::GetDouble() const {
-  if (IsDouble())
-    return double_value_;
+int64_t Value::GetInt64() const {
+  if (IsInt64())
+    return int64_value_;
   assert(false);
-  return 0.0;
+  return 0;
 }
 
 const std::string& Value::GetString() const {

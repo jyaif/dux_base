@@ -8,6 +8,7 @@ set(CMAKE_CXX_FLAGS "-std=c++14 -Werror")
 
 add_executable(
 	dux_base_test_bin
+	test/copyable_lambda_test.cpp
 	test/test.cpp
 	test/value_test.cpp
 	src/fps_counter.cpp

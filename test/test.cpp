@@ -12,6 +12,7 @@
 #include "thread_checker.h"
 #include "weak_ptr_factory.h"
 
+#include "copyable_lambda_test.h"
 #include "value_test.h"
 
 void TestBaseTypeWrapper();
@@ -207,6 +208,7 @@ int main(int argc, char* argv[]) {
   TestWeakPtrFactory();
   TestFPSCounter();
   TestValue();
+  TestCopyableLambda();
   printf("tests successfully passed\n");
   return EXIT_SUCCESS;
 }

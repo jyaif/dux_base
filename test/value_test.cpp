@@ -1,10 +1,10 @@
 #include <cassert>
 #include <cstdio>
 
+#include "value_test.h"
+
 #include "value.h"
 #include "value_serialization.h"
-
-#include "value_test.h"
 
 void TestValue() {
   dux::Value v0(true);

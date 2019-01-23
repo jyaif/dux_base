@@ -6,10 +6,10 @@ addons:
             - llvm-toolchain-precise
             - ubuntu-toolchain-r-test
         packages:
-            - clang-5.0
+            - clang-6.0
             - libstdc++-7-dev
 
-install: export CXX="clang++-5.0" CC="clang-5.0"
+install: export CXX="clang++-6.0" CC="clang-6.0"
 
 language: cpp
 

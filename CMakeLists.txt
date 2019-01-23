@@ -4,11 +4,12 @@ project(dux_base)
 # for tests:
 include_directories("src")
 
-set(CMAKE_CXX_FLAGS "-std=c++14 -Werror")
+set(CMAKE_CXX_FLAGS "-std=c++17 -Werror")
 
 add_executable(
 	dux_base_test_bin
 	test/copyable_lambda_test.cpp
+	test/observer_list_test.cpp
 	test/test.cpp
 	test/value_test.cpp
 	src/fps_counter.cpp

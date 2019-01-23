@@ -31,10 +31,17 @@ class ObserverList {
   // Remove an observer from the list if it is in the list.
   void RemoveObserver(ObserverType* observer) {
     VerifyThread();
-    for (ObserverType*& tempObserver : observers_) {
-      if (observer == tempObserver) {
-        tempObserver = nullptr;
+    for (ObserverType*& temp_observer : observers_) {
+      if (observer == temp_observer) {
+        temp_observer = nullptr;
         deletion_count_++;
+        return;
+      }
+    }
+    for (ObserverType*& temp_observer : new_observers_) {
+      if (observer == temp_observer) {
+        temp_observer = new_observers_.back();
+        new_observers_.pop_back();
         return;
       }
     }
@@ -105,6 +112,7 @@ class ObserverList {
     }                                                         \
   } while (0)
 
+// Deadlocks in case of re-entrance.
 template <class ObserverType>
 class ThreadSafeObserverList {
  public:
@@ -147,6 +155,19 @@ class ThreadSafeObserverList {
     }
   }
 
+#ifndef NDEBUG
+  // For tests only.
+  int ObserverCount() {
+    int count = 0;
+    for (auto const& observer : observers_) {
+      if (observer != nullptr) {
+        count++;
+      }
+    }
+    return count + new_observers_.size() - delete_observers_.size();
+  }
+#endif
+
   // A vector is used to keep the order of the observers deterministic.
   // Do not change to std::set.
   std::vector<ObserverType*> observers_;
@@ -159,25 +180,24 @@ class ThreadSafeObserverList {
 };
 
 // Thread safe version
-#define FOR_EACH_OBSERVER_TS(ObserverType, observerList, func)        \
-  do {                                                                \
-    observerList.PrepareObserverListForIteration();                   \
-    std::lock_guard<std::mutex> guard(observerList.observers_mutex_); \
-    for (ObserverType * observer : observerList.observers_) {         \
-      if (observer) {                                                 \
-        std::lock_guard<std::mutex> guard(                            \
-            observerList.delete_observers_mutex_);                    \
-        if (observerList.delete_observers_.size() > 0) {              \
-          for (ObserverType * observer_to_delete :                    \
-               observerList.delete_observers_) {                      \
-            if (observer == observer_to_delete) {                     \
-              continue;                                               \
-            }                                                         \
-          }                                                           \
-        }                                                             \
-        observer->func;                                               \
-      }                                                               \
-    }                                                                 \
+#define FOR_EACH_OBSERVER_TS(ObserverType, observerList, func)                 \
+  do {                                                                         \
+    observerList.PrepareObserverListForIteration();                            \
+    std::lock_guard<std::mutex> guard(observerList.observers_mutex_);          \
+    for (ObserverType * observer : observerList.observers_) {                  \
+      std::lock_guard<std::mutex> guard(observerList.delete_observers_mutex_); \
+      if (observer) {                                                          \
+        if (observerList.delete_observers_.size() > 0) {                       \
+          for (ObserverType * observer_to_delete :                             \
+               observerList.delete_observers_) {                               \
+            if (observer == observer_to_delete) {                              \
+              continue;                                                        \
+            }                                                                  \
+          }                                                                    \
+        }                                                                      \
+        observer->func;                                                        \
+      }                                                                        \
+    }                                                                          \
   } while (0)
 
 }  // namespace dux

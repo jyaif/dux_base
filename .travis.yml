@@ -3,8 +3,9 @@ sudo: required
 addons:
     apt:
         sources:
-            - llvm-toolchain-precise
+            - llvm-toolchain-trusty-6.0
             - ubuntu-toolchain-r-test
+            - sourceline: 'ppa:ubuntu-toolchain-r/test'
         packages:
             - clang-6.0
             - libstdc++-7-dev

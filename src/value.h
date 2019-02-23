@@ -29,8 +29,8 @@ class Value {
   explicit Value(int64_t in_int);
   explicit Value(std::string const& in_string);
   explicit Value(char const* in_string);
-  Value(Value&& that);
-  ~Value();
+  Value(Value&& other);
+  virtual ~Value();
 
   Type GetType() const { return type_; }
 

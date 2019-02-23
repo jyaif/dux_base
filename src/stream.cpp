@@ -1,5 +1,6 @@
 #include "stream.h"
 
+#include <array>
 #include <cassert>
 #include <cstddef>
 
@@ -20,7 +21,7 @@ void OStream::Write(int8_t const* ptr, size_t size) {
 }
 
 void OStream::Write(bool value) {
-  static_assert(sizeof(bool) == 1, "");
+  static_assert(sizeof(bool) == 1);
   Write(&value, sizeof(value));
 }
 
@@ -83,15 +84,14 @@ bool IStream::Read(void* ptr, size_t byte_count) {
   if (current_index_ + byte_count > size_) {
     memset(ptr, 0, byte_count);
     return false;
-  } else {
-    memcpy(ptr, ptr_ + current_index_, byte_count);
-    current_index_ += byte_count;
-    return true;
   }
+  memcpy(ptr, ptr_ + current_index_, byte_count);
+  current_index_ += byte_count;
+  return true;
 }
 
 bool IStream::Read(bool& value) {
-  static_assert(sizeof(bool) == 1, "");
+  static_assert(sizeof(bool) == 1);
   return Read(&value, sizeof(bool));
 }
 
@@ -132,13 +132,13 @@ bool IStream::Read(double& value) {
 
 bool IStream::Read(std::string& value) {
   uint32_t size;
+  std::array<int8_t, 32000> buffer;
   if (Read(size)) {
-    if (size > 32000) {
+    if (size >= buffer.size()) {
       return false;
     }
-    int8_t buffer[size];
-    if (Read(buffer, size)) {
-      value = std::string(buffer, buffer + size);
+    if (Read(buffer.data(), size)) {
+      value = std::string(buffer.data(), buffer.data() + size);
       return true;
     }
   }

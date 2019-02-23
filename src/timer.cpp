@@ -5,14 +5,14 @@ namespace dux {
 
 Timer::Timer() : time_elapsed_(0), previous_lap_time_(0), is_running_(false) {}
 
-Timer::~Timer() {}
+Timer::~Timer() = default;
 
 void Timer::Start() {
   if (is_running_) {
     return;
   }
   is_running_ = true;
-  gettimeofday(&start_time_, NULL);
+  gettimeofday(&start_time_, nullptr);
 }
 
 void Timer::Stop() {
@@ -30,7 +30,7 @@ double Timer::GetTimeElapsed() {
   }
 
   struct timeval end_time;
-  gettimeofday(&end_time, NULL);
+  gettimeofday(&end_time, nullptr);
 
   return static_cast<double>((end_time.tv_sec - start_time_.tv_sec) * 1000000 +
                              end_time.tv_usec - start_time_.tv_usec) /
@@ -62,7 +62,7 @@ AverageTimer::AverageTimer(std::string const& name, size_t iterations)
     times_.push_back(0);
   }
 }
-AverageTimer::~AverageTimer() {}
+AverageTimer::~AverageTimer() = default;
 
 void AverageTimer::Start() {
   timer_.Start();

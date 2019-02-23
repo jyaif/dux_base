@@ -1,6 +1,7 @@
 #include "interpolate.h"
 
 #include <cmath>
+#include <cstdio>
 
 namespace dux {
 
@@ -24,11 +25,9 @@ float QuadOut(float percentage) {
   return 1 - QuadIn(1 - percentage);
 }
 
-#include "stdio.h"
-
-float ElasticIn(float t) {
+float ElasticIn(float percentage) {
   const double pi(M_PI);
-  const double v(t - 1);
+  const double v(percentage - 1);
   const double p(0.3);
   return -std::pow(2, 10 * v) * std::sin((v - p / 4) * 2 * pi / p);
   /*

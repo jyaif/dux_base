@@ -25,7 +25,7 @@ void WriteValueToStream(Value const& value, dux::OStream& s) {
       s.Write(number_of_entries);
       for (auto& e : dict) {
         std::string const& key = e.first;
-        Value const& value = *e.second.get();
+        Value const& value = *e.second;
         s.Write(key);
         WriteValueToStream(value, s);
       }
@@ -35,7 +35,7 @@ void WriteValueToStream(Value const& value, dux::OStream& s) {
       int64_t number_of_entries = list.size();
       s.Write(number_of_entries);
       for (auto const& value : list) {
-        WriteValueToStream(*value.get(), s);
+        WriteValueToStream(*value, s);
       }
     } break;
   }
@@ -77,31 +77,36 @@ std::unique_ptr<Value> ReadValueFromStream(dux::IStream& stream) {
       }
       case Value::Type::DICTIONARY: {
         int64_t number_of_entries;
-        if (!stream.Read(number_of_entries))
+        if (!stream.Read(number_of_entries)) {
           break;
+        }
         auto dict_value = std::make_unique<Value>(Value::Type::DICTIONARY);
         Value::DictionaryStorage& dictionary = dict_value->GetDictionary();
         std::string key;
         for (int64_t i = 0; i < number_of_entries; i++) {
-          if (!stream.Read(key))
+          if (!stream.Read(key)) {
             return std::unique_ptr<Value>();
+          }
           auto value = ReadValueFromStream(stream);
-          if (!value.get())
+          if (!value.get()) {
             return std::unique_ptr<Value>();
+          }
           dictionary[key] = std::move(value);
         }
         return dict_value;
       }
       case Value::Type::LIST: {
         int64_t number_of_entries;
-        if (!stream.Read(number_of_entries))
+        if (!stream.Read(number_of_entries)) {
           break;
+        }
         auto list_value = std::make_unique<Value>(Value::Type::LIST);
         Value::ListStorage& list = list_value->GetList();
         for (int64_t i = 0; i < number_of_entries; i++) {
           auto value = ReadValueFromStream(stream);
-          if (!value.get())
+          if (!value.get()) {
             return std::unique_ptr<Value>();
+          }
           list.push_back(std::move(value));
         }
         return list_value;
@@ -114,8 +119,9 @@ std::unique_ptr<Value> ReadValueFromStream(dux::IStream& stream) {
 std::unique_ptr<Value> Deserialize(std::vector<int8_t> data) {
   dux::IStream s(std::move(data));
   auto v = ReadValueFromStream(s);
-  if (s.IsAtEnd())
+  if (s.IsAtEnd()) {
     return v;
+  }
   return std::unique_ptr<Value>();
 }
 

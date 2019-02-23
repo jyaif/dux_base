@@ -62,7 +62,7 @@ Value::Value(Value&& other) {
   }
 }
 
-Value::~Value() {}
+Value::~Value(){};
 
 bool Value::GetBool() const {
   assert(IsBool());
@@ -70,8 +70,9 @@ bool Value::GetBool() const {
 }
 
 int64_t Value::GetInt64() const {
-  if (IsInt64())
+  if (IsInt64()) {
     return int64_value_;
+  }
   assert(false);
   return 0;
 }
@@ -109,11 +110,13 @@ Value* Value::FindKeyOfType(std::string const& key, Type type) {
 const Value* Value::FindKeyOfType(std::string const& key, Type type) const {
   assert(IsDictionary());
   auto it = dictionary_.find(key);
-  if (it == dictionary_.end())
+  if (it == dictionary_.end()) {
     return nullptr;
+  }
   const Value* result = it->second.get();
-  if (result->GetType() != type)
+  if (result->GetType() != type) {
     return nullptr;
+  }
   return result;
 }
 

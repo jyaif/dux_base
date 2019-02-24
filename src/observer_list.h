@@ -48,6 +48,16 @@ class ObserverList {
     assert(false);
   }
 
+  void ForEachObserver(std::function<void(ObserverType&)> callback) {
+    VerifyThread();
+    PrepareObserverListForIteration();
+    for (ObserverType* observer : observers_) {
+      if (observer) {
+        callback(*observer);
+      }
+    }
+  }
+
 #ifndef NDEBUG
   // For tests only.
   int ObserverCount() {
@@ -129,6 +139,38 @@ class ThreadSafeObserverList {
     delete_observers_.push_back(observer);
   }
 
+  void ForEachObserver(std::function<void(ObserverType&)> callback) {
+    PrepareObserverListForIteration();
+    std::lock_guard<std::mutex> guard(observers_mutex_);
+    for (ObserverType* observer : observers_) {
+      std::lock_guard<std::mutex> guard(delete_observers_mutex_);
+      if (observer) {
+        if (!delete_observers_.empty()) {
+          for (ObserverType* observer_to_delete : delete_observers_) {
+            if (observer == observer_to_delete) {
+              continue;
+            }
+          }
+        }
+        callback(*observer);
+      }
+    }
+  }
+
+#ifndef NDEBUG
+  // For tests only.
+  int ObserverCount() {
+    int count = 0;
+    for (auto const& observer : observers_) {
+      if (observer != nullptr) {
+        count++;
+      }
+    }
+    return count + new_observers_.size() - delete_observers_.size();
+  }
+#endif
+
+ private:
   void PrepareObserverListForIteration() {
     {
       std::lock_guard<std::mutex> guard(delete_observers_mutex_);
@@ -155,19 +197,6 @@ class ThreadSafeObserverList {
     }
   }
 
-#ifndef NDEBUG
-  // For tests only.
-  int ObserverCount() {
-    int count = 0;
-    for (auto const& observer : observers_) {
-      if (observer != nullptr) {
-        count++;
-      }
-    }
-    return count + new_observers_.size() - delete_observers_.size();
-  }
-#endif
-
   // A vector is used to keep the order of the observers deterministic.
   // Do not change to std::set.
   std::vector<ObserverType*> observers_;
@@ -178,27 +207,6 @@ class ThreadSafeObserverList {
   std::mutex delete_observers_mutex_;
   int deletion_count_ = 0;
 };
-
-// Thread safe version
-#define FOR_EACH_OBSERVER_TS(ObserverType, observerList, func)                 \
-  do {                                                                         \
-    observerList.PrepareObserverListForIteration();                            \
-    std::lock_guard<std::mutex> guard(observerList.observers_mutex_);          \
-    for (ObserverType * observer : observerList.observers_) {                  \
-      std::lock_guard<std::mutex> guard(observerList.delete_observers_mutex_); \
-      if (observer) {                                                          \
-        if (observerList.delete_observers_.size() > 0) {                       \
-          for (ObserverType * observer_to_delete :                             \
-               observerList.delete_observers_) {                               \
-            if (observer == observer_to_delete) {                              \
-              continue;                                                        \
-            }                                                                  \
-          }                                                                    \
-        }                                                                      \
-        observer->func;                                                        \
-      }                                                                        \
-    }                                                                          \
-  } while (0)
 
 }  // namespace dux
 

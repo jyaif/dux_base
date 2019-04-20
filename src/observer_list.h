@@ -2,6 +2,7 @@
 #define DUX_BASE_SRC_OBSERVER_LIST_H_
 
 #include <cassert>
+#include <functional>
 #include <memory>
 #include <mutex>
 #include <set>

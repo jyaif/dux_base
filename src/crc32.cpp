@@ -1,8 +1,6 @@
 #include "crc32.h"
 
 #include <array>
-// #include <cmath>
-// #include <cstdio>
 
 namespace dux {
 

@@ -12,6 +12,7 @@ add_executable(
 	test/observer_list_test.cpp
 	test/test.cpp
 	test/value_test.cpp
+	src/crc32.cpp
 	src/fps_counter.cpp
 	src/interpolate.cpp
 	src/scoped_lambda.cpp

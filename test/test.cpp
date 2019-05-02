@@ -3,18 +3,18 @@
 #include <thread>
 
 #include "base_type_wrapper.h"
+#include "copyable_lambda_test.h"
+#include "crc32.h"
 #include "fps_counter.h"
 #include "mix.h"
 #include "observer_list.h"
+#include "observer_list_test.h"
 #include "scoped_lambda.h"
 #include "stream.h"
 #include "task_runner.h"
 #include "thread_checker.h"
-#include "weak_ptr_factory.h"
-
-#include "copyable_lambda_test.h"
-#include "observer_list_test.h"
 #include "value_test.h"
+#include "weak_ptr_factory.h"
 
 void TestBaseTypeWrapper();
 void TestMix();
@@ -33,6 +33,12 @@ void TestBaseTypeWrapper() {
   assert(v.value_ == 21);
   v -= 20;
   assert(v.value_ == 1);
+}
+
+void TestCRC32() {
+  assert(dux::ComputeCRC32("", 0) == 0);
+  assert(dux::ComputeCRC32("a", 1) == 3904355907);
+  assert(dux::ComputeCRC32("abc", 3) == 891568578);
 }
 
 void TestMix() {
@@ -162,6 +168,7 @@ int main(int argc, char* argv[]) {
   (void)argc;
   (void)argv;
   TestBaseTypeWrapper();
+  TestCRC32();
   TestMix();
   TestObserverList();
   TestScopedLambda();

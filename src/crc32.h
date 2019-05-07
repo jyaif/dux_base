@@ -1,6 +1,7 @@
 #ifndef DUX_BASE_SRC_CRC32_H_
 #define DUX_BASE_SRC_CRC32_H_
 
+#include <cstddef>
 #include <ctype.h>
 #include <cstdint>
 

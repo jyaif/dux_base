@@ -88,7 +88,7 @@ std::unique_ptr<Value> ReadValueFromStream(dux::IStream& stream) {
             return std::unique_ptr<Value>();
           }
           auto value = ReadValueFromStream(stream);
-          if (!value.get()) {
+          if (!value) {
             return std::unique_ptr<Value>();
           }
           dictionary[key] = std::move(value);
@@ -104,7 +104,7 @@ std::unique_ptr<Value> ReadValueFromStream(dux::IStream& stream) {
         Value::ListStorage& list = list_value->GetList();
         for (int64_t i = 0; i < number_of_entries; i++) {
           auto value = ReadValueFromStream(stream);
-          if (!value.get()) {
+          if (!value) {
             return std::unique_ptr<Value>();
           }
           list.push_back(std::move(value));
@@ -116,8 +116,8 @@ std::unique_ptr<Value> ReadValueFromStream(dux::IStream& stream) {
   return std::unique_ptr<Value>();
 }
 
-std::unique_ptr<Value> Deserialize(std::vector<int8_t> data) {
-  dux::IStream s(std::move(data));
+std::unique_ptr<Value> Deserialize(std::vector<int8_t> const& data) {
+  dux::IStream s(data);
   auto v = ReadValueFromStream(s);
   if (s.IsAtEnd()) {
     return v;

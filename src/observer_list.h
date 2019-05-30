@@ -145,7 +145,7 @@ class ThreadSafeObserverList {
     PrepareObserverListForIteration();
     std::lock_guard<std::mutex> guard(observers_mutex_);
     for (ObserverType* observer : observers_) {
-      std::lock_guard<std::mutex> guard(delete_observers_mutex_);
+      std::lock_guard<std::mutex> delete_guard(delete_observers_mutex_);
       if (observer) {
         if (!delete_observers_.empty()) {
           for (ObserverType* observer_to_delete : delete_observers_) {

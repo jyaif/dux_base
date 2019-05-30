@@ -25,17 +25,17 @@ void WriteValueToStream(Value const& value, dux::OStream& s) {
       s.Write(number_of_entries);
       for (auto& e : dict) {
         std::string const& key = e.first;
-        Value const& value = *e.second;
+        Value const& value_from_dict = *e.second;
         s.Write(key);
-        WriteValueToStream(value, s);
+        WriteValueToStream(value_from_dict, s);
       }
     } break;
     case Value::Type::LIST: {
       auto& list = value.GetList();
       int64_t number_of_entries = list.size();
       s.Write(number_of_entries);
-      for (auto const& value : list) {
-        WriteValueToStream(*value, s);
+      for (auto const& value_from_list : list) {
+        WriteValueToStream(*value_from_list, s);
       }
     } break;
   }

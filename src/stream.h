@@ -36,22 +36,22 @@ class IStream {
   IStream(std::vector<int8_t> const& data);
   IStream(int8_t const* ptr, size_t size);
 
-  bool Read(void* ptr, size_t byte_count);
-  bool Read(bool& value);
-  bool Read(int8_t& value);
-  bool Read(uint8_t& value);
-  bool Read(int16_t& value);
-  bool Read(uint16_t& value);
-  bool Read(int32_t& value);
-  bool Read(uint32_t& value);
-  bool Read(int64_t& value);
-  bool Read(uint64_t& value);
-  bool Read(double& value);
-  bool Read(std::string& value);
+  [[nodiscard]] bool Read(void* ptr, size_t byte_count);
+  [[nodiscard]] bool Read(bool& value);
+  [[nodiscard]] bool Read(int8_t& value);
+  [[nodiscard]] bool Read(uint8_t& value);
+  [[nodiscard]] bool Read(int16_t& value);
+  [[nodiscard]] bool Read(uint16_t& value);
+  [[nodiscard]] bool Read(int32_t& value);
+  [[nodiscard]] bool Read(uint32_t& value);
+  [[nodiscard]] bool Read(int64_t& value);
+  [[nodiscard]] bool Read(uint64_t& value);
+  [[nodiscard]] bool Read(double& value);
+  [[nodiscard]] bool Read(std::string& value);
 
-  bool SkipBytes(size_t byte_count);
+  [[nodiscard]] bool SkipBytes(size_t byte_count);
 
-  bool IsAtEnd();
+  [[nodiscard]] bool IsAtEnd();
 
  private:
   int8_t const* ptr_;

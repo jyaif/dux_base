@@ -12,7 +12,7 @@ namespace dux {
 class OStream {
  public:
   void Write(void const* ptr, size_t byte_count);
-  void Write(int8_t const* ptr, size_t size);
+  void Write(uint8_t const* ptr, size_t size);
   void Write(bool value);
   void Write(int8_t value);
   void Write(uint8_t value);
@@ -25,16 +25,16 @@ class OStream {
   void Write(double value);
   void Write(std::string const& string);
 
-  std::vector<int8_t> const& Data() const;
+  std::vector<uint8_t> const& Data() const;
 
  private:
-  std::vector<int8_t> data_;
+  std::vector<uint8_t> data_;
 };
 
 class IStream {
  public:
-  IStream(std::vector<int8_t> const& data);
-  IStream(int8_t const* ptr, size_t size);
+  IStream(std::vector<uint8_t> const& data);
+  IStream(uint8_t const* ptr, size_t size);
 
   [[nodiscard]] bool Read(void* ptr, size_t byte_count);
   [[nodiscard]] bool Read(bool& value);
@@ -54,7 +54,7 @@ class IStream {
   [[nodiscard]] bool IsAtEnd();
 
  private:
-  int8_t const* ptr_;
+  uint8_t const* ptr_;
   size_t size_;
   size_t current_index_;
 };

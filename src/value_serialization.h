@@ -5,9 +5,9 @@
 
 namespace dux {
 
-std::vector<int8_t> Serialize(Value const& value);
+std::vector<uint8_t> Serialize(Value const& value);
 
-std::unique_ptr<Value> Deserialize(std::vector<int8_t> const& data);
+std::unique_ptr<Value> Deserialize(std::vector<uint8_t> const& data);
 
 }  // namespace dux
 

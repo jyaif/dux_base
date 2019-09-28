@@ -8,10 +8,10 @@ namespace dux {
 
 void OStream::Write(void const* ptr, size_t byte_count) {
   assert(ptr);
-  Write(static_cast<int8_t const*>(ptr), byte_count);
+  Write(static_cast<uint8_t const*>(ptr), byte_count);
 }
 
-void OStream::Write(int8_t const* ptr, size_t size) {
+void OStream::Write(uint8_t const* ptr, size_t size) {
   assert(ptr);
   while (size) {
     data_.push_back(*ptr);
@@ -67,14 +67,14 @@ void OStream::Write(std::string const& string) {
   Write(string.data(), string.length());
 }
 
-std::vector<int8_t> const& OStream::Data() const {
+std::vector<uint8_t> const& OStream::Data() const {
   return data_;
 }
 
-IStream::IStream(std::vector<int8_t> const& data)
+IStream::IStream(std::vector<uint8_t> const& data)
     : ptr_(data.data()), size_(data.size()), current_index_(0) {}
 
-IStream::IStream(int8_t const* ptr, size_t size)
+IStream::IStream(uint8_t const* ptr, size_t size)
     : ptr_(ptr), size_(size), current_index_(0) {
   assert(ptr);
 }

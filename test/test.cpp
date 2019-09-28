@@ -81,7 +81,8 @@ void TestStream() {
     std::string s1;
     std::string s2;
     bool success = true;
-    istream.SkipBytes(1);
+    auto v = istream.SkipBytes(1);
+    assert(v);
     assert(!istream.IsAtEnd());
     success &= istream.Read(b);
     success &= istream.Read(c);

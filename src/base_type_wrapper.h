@@ -22,6 +22,11 @@ class BaseTypeWrapper {
     value_++;
     return *this;
   }
+  BaseTypeWrapper operator--() {
+    value_--;
+    return *this;
+  }
+
   constexpr bool operator!=(const BaseTypeWrapper& o) const {
     return value_ != o.value_;
   }

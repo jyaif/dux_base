@@ -25,9 +25,11 @@ void TestThreadChecker();
 void TestWeakPtrFactory();
 
 void TestBaseTypeWrapper() {
-  dux::BaseTypeWrapper<int64_t> v(10);
-  assert(v.value_ == 10);
+  dux::BaseTypeWrapper<int64_t> v(11);
+  assert(v.value_ == 11);
   ++v;
+  assert(v.value_ == 12);
+  --v;
   assert(v.value_ == 11);
   v += 10;
   assert(v.value_ == 21);

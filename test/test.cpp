@@ -10,6 +10,7 @@
 #include "observer_list.h"
 #include "observer_list_test.h"
 #include "scope_guard.h"
+#include "scoped_callback.h"
 #include "stream.h"
 #include "task_runner.h"
 #include "thread_checker.h"
@@ -56,6 +57,23 @@ void TestScopeGuard() {
     assert(a == 0);
   }
   assert(a == 10);
+}
+
+void TestScopedCallback() {
+  int a = 213;
+  bool first = false;
+  bool second = false;
+  auto weak_factory = std::make_unique<dux::WeakPtrFactory<int>>(&a);
+  auto first_callback = dux::ScopedCallback(weak_factory->GetWeak(),
+                                            [&first]() { first = true; });
+  auto second_callback = dux::ScopedCallback(weak_factory->GetWeak(),
+                                             [&second]() { second = true; });
+
+  first_callback();
+  weak_factory.reset();
+  second_callback();
+  assert(first == true);
+  assert(second == false);
 }
 
 void TestStream() {
@@ -175,6 +193,7 @@ int main(int argc, char* argv[]) {
   TestMix();
   TestObserverList();
   TestScopeGuard();
+  TestScopedCallback();
   TestStream();
   TestThreadChecker();
   TestTaskRunner();

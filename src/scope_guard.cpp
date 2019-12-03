@@ -2,8 +2,7 @@
 
 namespace dux {
 
-ScopeGuard::ScopeGuard(std::function<void()> const& lambda)
-    : lambda_(lambda) {}
+ScopeGuard::ScopeGuard(std::function<void()> const& lambda) : lambda_(lambda) {}
 
 ScopeGuard::~ScopeGuard() {
   lambda_();

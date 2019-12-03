@@ -15,7 +15,7 @@ class Timer {
   void Stop();
   double GetTimeElapsed();
   double GetLapTime();
-  void Print(char const* ptr = NULL);
+  void Print(char const* ptr = nullptr);
   bool GetIsRunning();
 
  private:

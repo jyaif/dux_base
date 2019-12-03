@@ -9,7 +9,7 @@
 #include "mix.h"
 #include "observer_list.h"
 #include "observer_list_test.h"
-#include "scoped_lambda.h"
+#include "scope_guard.h"
 #include "stream.h"
 #include "task_runner.h"
 #include "thread_checker.h"
@@ -18,7 +18,7 @@
 
 void TestBaseTypeWrapper();
 void TestMix();
-void TestScopedLambda();
+void TestScopeGuard();
 void TestStream();
 void SomeThread(std::pair<dux::ThreadChecker*, bool*> params);
 void TestThreadChecker();
@@ -49,10 +49,10 @@ void TestMix() {
   assert(dux::Mix(100.0, 110.0, 0.5) == 105.0);
 }
 
-void TestScopedLambda() {
+void TestScopeGuard() {
   int a = 0;
   {
-    dux::ScopedLambda lambda([&a] { a = 10; });
+    dux::ScopeGuard lambda([&a] { a = 10; });
     assert(a == 0);
   }
   assert(a == 10);
@@ -174,7 +174,7 @@ int main(int argc, char* argv[]) {
   TestCRC32();
   TestMix();
   TestObserverList();
-  TestScopedLambda();
+  TestScopeGuard();
   TestStream();
   TestThreadChecker();
   TestTaskRunner();

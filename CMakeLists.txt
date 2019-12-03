@@ -15,7 +15,7 @@ add_executable(
 	src/crc32.cpp
 	src/fps_counter.cpp
 	src/interpolate.cpp
-	src/scoped_lambda.cpp
+	src/scope_guard.cpp
 	src/stream.cpp
 	src/task_runner.cpp
 	src/timer.cpp

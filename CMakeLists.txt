@@ -4,7 +4,7 @@ project(dux_base)
 # for tests:
 include_directories("src")
 
-set(CMAKE_CXX_FLAGS "-std=c++17 -stdlib=libc++ -Werror")
+set(CMAKE_CXX_FLAGS "-std=c++17 -Werror")
 
 add_executable(
 	dux_base_test_bin

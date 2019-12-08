@@ -3,14 +3,12 @@ sudo: required
 addons:
     apt:
         sources:
-            - llvm-toolchain-trusty-6.0
+            - llvm-toolchain-precise
             - ubuntu-toolchain-r-test
-            - sourceline: 'ppa:ubuntu-toolchain-r/test'
         packages:
-            - clang-6.0
-            - libstdc++-7-dev
+            - clang-5.0
 
-install: export CXX="clang++-6.0" CC="clang-6.0"
+install: export CXX="clang++-5.0" CC="clang-5.0"
 
 language: cpp
 

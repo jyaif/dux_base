@@ -38,7 +38,7 @@ Value::Value(std::string const& in_string)
 Value::Value(char const* in_string)
     : type_(Type::STRING), string_value_(in_string) {}
 
-Value::Value(Value&& other) {
+Value::Value(Value&& other) noexcept {
   type_ = other.type_;
 
   switch (type_) {

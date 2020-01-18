@@ -7,6 +7,7 @@
 #include "crc32.h"
 #include "fps_counter.h"
 #include "mix.h"
+#include "obfuscated.h"
 #include "observer_list.h"
 #include "observer_list_test.h"
 #include "scope_guard.h"
@@ -185,6 +186,15 @@ void TestFPSCounter() {
   assert(f.GetFPS() == 0);
 }
 
+void TestObfuscated() {
+  dux::Obfuscated<int> a;
+  assert(a.GetValue() == 0);
+  a.SetValue(10);
+  assert(a.GetValue() == 10);
+  dux::Obfuscated<int> b(33);
+  assert(b.GetValue() == 33);
+}
+
 int main(int argc, char* argv[]) {
   (void)argc;
   (void)argv;
@@ -192,6 +202,7 @@ int main(int argc, char* argv[]) {
   TestCRC32();
   TestMix();
   TestObserverList();
+  TestObfuscated();
   TestScopeGuard();
   TestScopedCallback();
   TestStream();

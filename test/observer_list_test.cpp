@@ -1,6 +1,7 @@
 #include "observer_list_test.h"
 
 #include <cassert>
+#include <type_traits>
 
 #include "observer_list.h"
 

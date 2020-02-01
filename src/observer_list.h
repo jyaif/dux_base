@@ -6,6 +6,7 @@
 #include <memory>
 #include <mutex>
 #include <set>
+#include <type_traits>
 #include <vector>
 
 #include "thread_checker.h"

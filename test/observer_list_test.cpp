@@ -1,7 +1,6 @@
 #include "observer_list_test.h"
 
 #include <cassert>
-#include <type_traits>
 
 #include "observer_list.h"
 
@@ -25,7 +24,7 @@ class TestObserverWithLambda : public TestObserver {
 };
 
 template <class T>
-void TemplatedTestObserverList() {
+void TemplatedTestObserverList(bool skip_reentrency_tests) {
   T observer_list;
   TestObserver observer_1;
   TestObserver observer_2;
@@ -58,9 +57,10 @@ void TemplatedTestObserverList() {
   observer_list.RemoveObserver(&observer_2);
   assert(observer_list.ObserverCount() == 0);
 
-  // ThreadSafeObserverList deadlocks in case of re-entrancy.
-  if constexpr (std::is_same_v<T, dux::ThreadSafeObserverList<TestObserver>>)
-    return;
+  
+  if (skip_reentrency_tests) {
+      return;
+  }
 
   // Test that modifying the observer list while iterating over it works.
   TestObserver observer_3;
@@ -86,6 +86,7 @@ void TemplatedTestObserverList() {
 }
 
 void TestObserverList() {
-  TemplatedTestObserverList<dux::ObserverList<TestObserver>>();
-  TemplatedTestObserverList<dux::ThreadSafeObserverList<TestObserver>>();
+  TemplatedTestObserverList<dux::ObserverList<TestObserver>>(false);
+  // ThreadSafeObserverList deadlocks in case of re-entrancy.
+  TemplatedTestObserverList<dux::ThreadSafeObserverList<TestObserver>>(true);
 }

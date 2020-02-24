@@ -8,8 +8,6 @@
 #include <set>
 #include <vector>
 
-#include "thread_checker.h"
-
 namespace dux {
 
 template <class ObserverType>
@@ -20,19 +18,16 @@ class ObserverLink {
 
 template <class ObserverType>
 // Class is not thread safe.
-// TODO: add debug checks that all methods are called from the same thread.
 class ObserverList {
  public:
   // Add an observer to the list.  An observer should not be added to
   // the same list more than once.
   void AddObserver(ObserverType* observer) {
-    VerifyThread();
     new_observers_.push_back(observer);
   }
 
   // Remove an observer from the list if it is in the list.
   void RemoveObserver(ObserverType* observer) {
-    VerifyThread();
     for (ObserverType*& temp_observer : observers_) {
       if (observer == temp_observer) {
         temp_observer = nullptr;
@@ -51,7 +46,6 @@ class ObserverList {
   }
 
   void ForEachObserver(std::function<void(ObserverType&)> callback) {
-    VerifyThread();
     PrepareObserverListForIteration();
     for (ObserverType* observer : observers_) {
       if (observer) {
@@ -93,29 +87,15 @@ class ObserverList {
     }
   }
 
-  void VerifyThread() {
-#ifndef NDEBUG
-    if (!thread_checker_) {
-      thread_checker_ = std::make_unique<ThreadChecker>();
-    } else {
-      assert(thread_checker_->IsCreationThreadCurrent());
-    }
-#endif
-  }
-
   // A vector is used to keep the order of the observers deterministic.
   // Do not change to std::set.
   std::vector<ObserverType*> observers_;
   std::vector<ObserverType*> new_observers_;
   int deletion_count_ = 0;
-#ifndef NDEBUG
-  std::unique_ptr<ThreadChecker> thread_checker_;
-#endif
 };
 
 #define FOR_EACH_OBSERVER(ObserverType, observerList, func)   \
   do {                                                        \
-    observerList.VerifyThread();                              \
     observerList.PrepareObserverListForIteration();           \
     for (ObserverType * observer : observerList.observers_) { \
       if (observer) {                                         \

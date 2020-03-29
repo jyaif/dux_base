@@ -1,0 +1,6 @@
+#ifndef BACKGROUND_TASK_RUNNER_TEST_H_
+#define BACKGROUND_TASK_RUNNER_TEST_H_
+
+void TestBackgroundTaskRunner();
+
+#endif  // BACKGROUND_TASK_RUNNER_TEST_H_

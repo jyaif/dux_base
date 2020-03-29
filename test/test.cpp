@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <thread>
 
+#include "background_task_runner_test.h"
 #include "base_type_wrapper.h"
 #include "copyable_lambda_test.h"
 #include "crc32.h"
@@ -198,6 +199,7 @@ void TestObfuscated() {
 int main(int argc, char* argv[]) {
   (void)argc;
   (void)argv;
+  TestBackgroundTaskRunner();
   TestBaseTypeWrapper();
   TestCRC32();
   TestMix();

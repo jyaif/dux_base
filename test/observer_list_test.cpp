@@ -57,9 +57,8 @@ void TemplatedTestObserverList(bool skip_reentrency_tests) {
   observer_list.RemoveObserver(&observer_2);
   assert(observer_list.ObserverCount() == 0);
 
-  
   if (skip_reentrency_tests) {
-      return;
+    return;
   }
 
   // Test that modifying the observer list while iterating over it works.

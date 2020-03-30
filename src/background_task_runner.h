@@ -21,11 +21,12 @@ class BackgroundTaskRunner {
   // Blocks until all on-going tasks have executed.
   void Stop();
 
-  std::thread background_thread_;
   std::queue<BackgroundTask> tasks_to_run_;
   std::mutex tasks_mutex_;
   std::condition_variable cv_;
   bool exit_ = false;
+  // Needs to be constructed *after* most of the other members.
+  std::thread background_thread_;
 };
 
 }  // namespace dux

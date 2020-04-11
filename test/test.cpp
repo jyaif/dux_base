@@ -194,6 +194,8 @@ void TestObfuscated() {
   assert(a.GetValue() == 10);
   dux::Obfuscated<int> b(33);
   assert(b.GetValue() == 33);
+  dux::Obfuscated<int> c(b);
+  assert(c.GetValue() == 33);
 }
 
 int main(int argc, char* argv[]) {

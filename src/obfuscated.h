@@ -6,6 +6,9 @@ namespace dux {
 template <class T>
 class Obfuscated {
  public:
+  Obfuscated(Obfuscated<T> const& other)
+      : obfuscated_value_(other.obfuscated_value_),
+        obfuscator_(other.obfuscator_) {}
   Obfuscated(T initial_value) {
     InitializeObfuscator();
     SetValue(initial_value);

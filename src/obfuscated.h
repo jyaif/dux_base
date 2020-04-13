@@ -1,6 +1,8 @@
 #ifndef DUX_BASE_SRC_OBFUSCATED_H_
 #define DUX_BASE_SRC_OBFUSCATED_H_
 
+#include <cstdlib>
+
 namespace dux {
 
 template <class T>

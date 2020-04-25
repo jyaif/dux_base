@@ -13,9 +13,8 @@ class Timer {
   ~Timer();
   void Start();
   void Stop();
-  double GetTimeElapsed();
+  double GetTimeElapsed() const;
   double GetLapTime();
-  void Print(char const* ptr = nullptr);
   bool GetIsRunning();
 
  private:
@@ -24,6 +23,8 @@ class Timer {
   struct timeval start_time_;
   bool is_running_;
 };
+
+std::ostream& operator<<(std::ostream& stream, const Timer& timer);
 
 class AverageTimer {
  public:

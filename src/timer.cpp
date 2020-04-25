@@ -1,5 +1,6 @@
-
 #include "timer.h"
+
+#include <sstream>
 
 namespace dux {
 
@@ -24,7 +25,7 @@ void Timer::Stop() {
   is_running_ = false;
 }
 
-double Timer::GetTimeElapsed() {
+double Timer::GetTimeElapsed() const {
   if (!is_running_) {
     return time_elapsed_;
   }
@@ -44,16 +45,13 @@ double Timer::GetLapTime() {
   return delta;
 }
 
-void Timer::Print(char const* ptr) {
-  if (ptr) {
-    printf("%s: %fms\n", ptr, GetTimeElapsed());
-  } else {
-    printf("time elapsed: %fms\n", GetTimeElapsed());
-  }
-}
-
 bool Timer::GetIsRunning() {
   return is_running_;
+}
+
+std::ostream& operator<<(std::ostream& stream, const Timer& timer) {
+  stream << timer.GetTimeElapsed() << "ms";
+  return stream;
 }
 
 AverageTimer::AverageTimer(std::string const& name, size_t iterations)

@@ -6,6 +6,9 @@ include_directories("src")
 
 set(CMAKE_CXX_FLAGS "-std=c++17 -Werror")
 
+add_compile_options("-Wthread-safety")
+add_compile_options("-D _LIBCPP_ENABLE_THREAD_SAFETY_ANNOTATIONS")
+
 add_executable(
     dux_base_test_bin
     src/background_task_runner.cpp

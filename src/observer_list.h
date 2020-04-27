@@ -8,6 +8,8 @@
 #include <set>
 #include <vector>
 
+#include "macros.h"
+
 namespace dux {
 
 template <class ObserverType>
@@ -142,6 +144,9 @@ class ThreadSafeObserverList {
 #ifndef NDEBUG
   // For tests only.
   int ObserverCount() {
+    std::lock_guard<std::mutex> guard(delete_observers_mutex_);
+    std::lock_guard<std::mutex> guard2(new_observers_mutex_);
+    std::lock_guard<std::mutex> guard3(observers_mutex_);
     int count = 0;
     for (auto const& observer : observers_) {
       if (observer != nullptr) {
@@ -171,6 +176,7 @@ class ThreadSafeObserverList {
     }
     {
       std::lock_guard<std::mutex> guard(new_observers_mutex_);
+      std::lock_guard<std::mutex> guard2(observers_mutex_);
       if (!new_observers_.empty()) {
         observers_.insert(std::end(observers_), std::begin(new_observers_),
                           std::end(new_observers_));
@@ -181,9 +187,9 @@ class ThreadSafeObserverList {
 
   // A vector is used to keep the order of the observers deterministic.
   // Do not change to std::set.
-  std::vector<ObserverType*> observers_;
-  std::vector<ObserverType*> new_observers_;
-  std::vector<ObserverType*> delete_observers_;
+  std::vector<ObserverType*> observers_ GUARDED_BY(observers_mutex_);
+  std::vector<ObserverType*> new_observers_ GUARDED_BY(new_observers_mutex_);
+  std::vector<ObserverType*> delete_observers_ GUARDED_BY(delete_observers_mutex_);
   std::mutex observers_mutex_;
   std::mutex new_observers_mutex_;
   std::mutex delete_observers_mutex_;

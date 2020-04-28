@@ -189,7 +189,8 @@ class ThreadSafeObserverList {
   // Do not change to std::set.
   std::vector<ObserverType*> observers_ GUARDED_BY(observers_mutex_);
   std::vector<ObserverType*> new_observers_ GUARDED_BY(new_observers_mutex_);
-  std::vector<ObserverType*> delete_observers_ GUARDED_BY(delete_observers_mutex_);
+  std::vector<ObserverType*> delete_observers_
+      GUARDED_BY(delete_observers_mutex_);
   std::mutex observers_mutex_;
   std::mutex new_observers_mutex_;
   std::mutex delete_observers_mutex_;

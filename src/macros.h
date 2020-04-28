@@ -15,7 +15,8 @@
 // and compile with -Wthread-safety
 #if _LIBCPP_ENABLE_THREAD_SAFETY_ANNOTATIONS
 #define GUARDED_BY(guard) __attribute__((guarded_by(guard)))
-#define EXCLUSIVE_LOCKS_REQUIRED(...) __attribute__((exclusive_locks_required(__VA_ARGS__)))
+#define EXCLUSIVE_LOCKS_REQUIRED(...) \
+  __attribute__((exclusive_locks_required(__VA_ARGS__)))
 #else
 #define GUARDED_BY(guard)
 #define EXCLUSIVE_LOCKS_REQUIRED(...)

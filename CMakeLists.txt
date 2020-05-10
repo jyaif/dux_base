@@ -6,8 +6,12 @@ include_directories("src")
 
 set(CMAKE_CXX_FLAGS "-std=c++17 -Werror")
 
-add_compile_options("-Wthread-safety")
+if (APPLE)
+# I didn't manage to have libc++ with thread safety annotations on linux, so
+# only enabling them on macOS.
 add_compile_options("-D _LIBCPP_ENABLE_THREAD_SAFETY_ANNOTATIONS")
+add_compile_options("-Wthread-safety")
+endif
 
 add_executable(
     dux_base_test_bin

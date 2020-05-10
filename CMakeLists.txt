@@ -11,7 +11,7 @@ if (APPLE)
 # only enabling them on macOS.
 add_compile_options("-D _LIBCPP_ENABLE_THREAD_SAFETY_ANNOTATIONS")
 add_compile_options("-Wthread-safety")
-endif
+endif()
 
 add_executable(
     dux_base_test_bin

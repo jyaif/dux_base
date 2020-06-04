@@ -11,7 +11,7 @@ class ThreadPacer {
   void Sleep();
 
  private:
-  std::chrono::system_clock::time_point start_;
+  std::chrono::steady_clock::time_point start_;
   double update_ = 0;
   int wake_up_frequency_;
 };

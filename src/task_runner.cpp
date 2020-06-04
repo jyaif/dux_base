@@ -6,7 +6,7 @@ TaskWithTimeStamp::TaskWithTimeStamp(Task const& task, TimeStamp time_stamp)
     : task_(task), time_stamp_(time_stamp) {}
 
 void TaskRunner::RunLoop() {
-  auto now = std::chrono::high_resolution_clock::now();
+  auto now = std::chrono::steady_clock::now();
 
   std::vector<Task> tasks_to_run;
 
@@ -29,14 +29,13 @@ void TaskRunner::RunLoop() {
 }
 
 void TaskRunner::PostTask(Task const& task) {
-  TimeStamp time = std::chrono::high_resolution_clock::now();
+  TimeStamp time = std::chrono::steady_clock::now();
   std::lock_guard<std::mutex> guard(tasks_mutex_);
   timed_tasks_.emplace_back(TaskWithTimeStamp(task, time));
 }
 
 void TaskRunner::PostTask(Task const& task, int64_t ms) {
-  auto time =
-      std::chrono::high_resolution_clock::now() + std::chrono::milliseconds(ms);
+  auto time = std::chrono::steady_clock::now() + std::chrono::milliseconds(ms);
   std::lock_guard<std::mutex> guard(tasks_mutex_);
   timed_tasks_.emplace_back(task, time);
 }

@@ -9,7 +9,7 @@
 namespace dux {
 
 using Task = std::function<void(void)>;
-using TimeStamp = std::chrono::time_point<std::chrono::high_resolution_clock>;
+using TimeStamp = std::chrono::time_point<std::chrono::steady_clock>;
 
 class TaskWithTimeStamp {
  public:

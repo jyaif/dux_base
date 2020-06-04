@@ -6,7 +6,7 @@ namespace dux {
 void FPSCounter::Update() {
   frames_drawn_since_start_of_measurement_++;
 
-  auto now = std::chrono::high_resolution_clock::now();
+  auto now = std::chrono::steady_clock::now();
   auto time_since_start_of_measurement = now - start_of_measurement_;
   if (std::chrono::duration_cast<std::chrono::milliseconds>(
           time_since_start_of_measurement)

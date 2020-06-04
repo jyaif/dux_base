@@ -6,7 +6,7 @@ namespace dux {
 
 ThreadPacer::ThreadPacer(int wake_up_frequency)
     : wake_up_frequency_(wake_up_frequency) {
-  start_ = std::chrono::system_clock::now();
+  start_ = std::chrono::steady_clock::now();
 }
 
 void ThreadPacer::Sleep() {

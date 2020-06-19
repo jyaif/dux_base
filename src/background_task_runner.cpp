@@ -6,6 +6,8 @@ namespace dux {
 
 namespace {
 
+#if !DUX_BASE_DISABLE_THREADING
+
 void RunBackgroundThread(BackgroundTaskRunner* btr) {
   while (true) {
     // Look at the state of the btr:
@@ -37,8 +39,23 @@ void RunBackgroundThread(BackgroundTaskRunner* btr) {
   }
 }
 
+#endif
+
 }  // namespace
 
+#if DUX_BASE_DISABLE_THREADING
+
+BackgroundTaskRunner::BackgroundTaskRunner() {}
+
+BackgroundTaskRunner::~BackgroundTaskRunner() {}
+
+void BackgroundTaskRunner::PostTask(BackgroundTask const& task) {
+  task();
+}
+
+void BackgroundTaskRunner::Stop() {}
+
+#else
 BackgroundTaskRunner::BackgroundTaskRunner()
     : background_thread_(RunBackgroundThread, this) {}
 
@@ -65,5 +82,7 @@ void BackgroundTaskRunner::Stop() {
   cv_.notify_one();
   background_thread_.join();
 }
+
+#endif
 
 }  // namespace dux

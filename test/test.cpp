@@ -14,6 +14,8 @@
 #include "scope_guard.h"
 #include "scoped_callback.h"
 #include "stream.h"
+#include "string_utils.h"
+#include "string_utils_test.h"
 #include "task_runner.h"
 #include "thread_checker.h"
 #include "value_test.h"
@@ -210,6 +212,7 @@ int main(int argc, char* argv[]) {
   TestScopeGuard();
   TestScopedCallback();
   TestStream();
+  TestStringUtils();
   TestThreadChecker();
   TestTaskRunner();
   TestWeakPtrFactory();

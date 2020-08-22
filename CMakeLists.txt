@@ -29,6 +29,8 @@ add_executable(
     src/scope_guard.h
     src/stream.cpp
     src/stream.h
+    src/string_utils.cpp
+    src/string_utils.h
     src/task_runner.cpp
     src/task_runner.h
     src/timer.cpp
@@ -43,6 +45,8 @@ add_executable(
     test/copyable_lambda_test.h
     test/observer_list_test.cpp
     test/observer_list_test.h
+    test/string_utils_test.cpp
+    test/string_utils_test.h
     test/test.cpp
     test/value_test.cpp
     test/value_test.h

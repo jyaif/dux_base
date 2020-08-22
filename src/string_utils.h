@@ -7,6 +7,10 @@
 namespace dux {
 
 std::vector<std::string> SplitNewLines(std::string const& string);
+std::vector<std::string> SplitString(std::string const& string,
+                                     std::string const& delim);
+bool HasEnding(std::string const& full_string, std::string const& ending);
+bool StartsWith(std::string_view full_string, std::string_view prefix);
 
 }  // namespace dux
 

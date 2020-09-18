@@ -1,5 +1,6 @@
 #include "string_utils.h"
 
+#include <cstring>
 #include <sstream>
 
 namespace dux {

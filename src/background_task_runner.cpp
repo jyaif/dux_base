@@ -1,5 +1,6 @@
 #include "background_task_runner.h"
 
+#include <cassert>
 #include <optional>
 
 namespace dux {
@@ -45,7 +46,7 @@ void RunBackgroundThread(BackgroundTaskRunner* btr) {
 
 #if DUX_BASE_DISABLE_THREADING
 
-BackgroundTaskRunner::BackgroundTaskRunner() {}
+BackgroundTaskRunner::BackgroundTaskRunner(int number_of_threads) {}
 
 BackgroundTaskRunner::~BackgroundTaskRunner() {}
 

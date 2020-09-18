@@ -15,18 +15,19 @@ using BackgroundTask = std::function<void(void)>;
 
 class BackgroundTaskRunner {
  public:
-  BackgroundTaskRunner();
+  BackgroundTaskRunner(int number_of_threads = 1);
   ~BackgroundTaskRunner();
   void PostTask(BackgroundTask const& task);
   // Blocks until all on-going tasks have executed.
   void Stop();
+  int TasksToRun();
 
   std::queue<BackgroundTask> tasks_to_run_;
   std::mutex tasks_mutex_;
   std::condition_variable cv_;
   bool exit_ = false;
   // Needs to be constructed *after* most of the other members.
-  std::thread background_thread_;
+  std::vector<std::thread> background_threads_;
 };
 
 }  // namespace dux

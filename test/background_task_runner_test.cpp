@@ -29,4 +29,19 @@ void TestBackgroundTaskRunner() {
     assert(v == 1);
   }
   assert(v == 3);
+
+  {
+    v = 0;
+    dux::BackgroundTaskRunner btr(2);
+    for (int i = 0; i < 2; i++) {
+      btr.PostTask([&v]() {
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        v += 1;
+      });
+    }
+    std::this_thread::sleep_for(std::chrono::milliseconds(50));
+    assert(v == 0);
+    std::this_thread::sleep_for(std::chrono::milliseconds(150));
+    assert(v == 2);
+  }
 }

@@ -27,7 +27,7 @@ void RunBackgroundThread(BackgroundTaskRunner* btr) {
     // If the btr has a task to run, run it.
     std::optional<BackgroundTask> optional_task;
     {
-      std::unique_lock<std::mutex> lock(btr->tasks_mutex_);
+      std::lock_guard<std::mutex> lock(btr->tasks_mutex_);
       if (!btr->tasks_to_run_.empty()) {
         optional_task = btr->tasks_to_run_.front();
         btr->tasks_to_run_.pop();
@@ -56,8 +56,13 @@ void BackgroundTaskRunner::PostTask(BackgroundTask const& task) {
 void BackgroundTaskRunner::Stop() {}
 
 #else
-BackgroundTaskRunner::BackgroundTaskRunner()
-    : background_thread_(RunBackgroundThread, this) {}
+BackgroundTaskRunner::BackgroundTaskRunner(int number_of_threads) {
+  assert(number_of_threads > 0);
+  for (int i = 0; i < number_of_threads; i++) {
+    std::thread t(RunBackgroundThread, this);
+    background_threads_.emplace_back(std::move(t));
+  }
+}
 
 BackgroundTaskRunner::~BackgroundTaskRunner() {
   Stop();
@@ -66,21 +71,26 @@ BackgroundTaskRunner::~BackgroundTaskRunner() {
 void BackgroundTaskRunner::PostTask(BackgroundTask const& task) {
   {
     std::lock_guard<std::mutex> guard(tasks_mutex_);
+    if (exit_) {
+      return;
+    }
     tasks_to_run_.push(task);
   }
-  cv_.notify_one();
+  cv_.notify_all();
 }
 
 void BackgroundTaskRunner::Stop() {
-  if (exit_) {
-    return;
-  }
   {
     std::lock_guard<std::mutex> guard(tasks_mutex_);
+    if (exit_) {
+      return;
+    }
     exit_ = true;
   }
-  cv_.notify_one();
-  background_thread_.join();
+  cv_.notify_all();
+  for (auto& thread : background_threads_) {
+    thread.join();
+  }
 }
 
 #endif

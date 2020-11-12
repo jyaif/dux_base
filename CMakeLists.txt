@@ -43,6 +43,8 @@ add_executable(
     test/background_task_runner_test.h
     test/copyable_lambda_test.cpp
     test/copyable_lambda_test.h
+    test/interpolate_test.cpp
+    test/interpolate_test.h
     test/observer_list_test.cpp
     test/observer_list_test.h
     test/string_utils_test.cpp

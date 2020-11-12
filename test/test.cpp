@@ -7,6 +7,7 @@
 #include "copyable_lambda_test.h"
 #include "crc32.h"
 #include "fps_counter.h"
+#include "interpolate_test.h"
 #include "mix.h"
 #include "obfuscated.h"
 #include "observer_list.h"
@@ -219,6 +220,7 @@ int main(int argc, char* argv[]) {
   TestFPSCounter();
   TestValue();
   TestCopyableLambda();
+  TestInterpolation();
   printf("tests successfully passed\n");
   return EXIT_SUCCESS;
 }

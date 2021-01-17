@@ -62,7 +62,7 @@ void OStream::Write(double value) {
 }
 
 void OStream::Write(std::string const& string) {
-  uint32_t size = string.size();
+  uint32_t size = static_cast<uint32_t>(string.size());
   Write(size);
   Write(string.data(), string.length());
 }

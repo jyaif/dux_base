@@ -15,6 +15,7 @@ class Timer {
   ~Timer();
   void Start();
   void Stop();
+  // Returns the number of milliseconds.
   double GetTimeElapsed() const;
   double GetLapTime();
   bool GetIsRunning();

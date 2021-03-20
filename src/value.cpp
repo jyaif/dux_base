@@ -108,16 +108,20 @@ Value* Value::FindKeyOfType(std::string const& key, Type type) {
 }
 
 const Value* Value::FindKeyOfType(std::string const& key, Type type) const {
+  const Value* result = FindKey(key);
+  if (!result || result->GetType() != type) {
+    return nullptr;
+  }
+  return result;
+}
+
+const Value* Value::FindKey(std::string const& key) const {
   assert(IsDictionary());
   auto it = dictionary_.find(key);
   if (it == dictionary_.end()) {
     return nullptr;
   }
-  const Value* result = it->second.get();
-  if (result->GetType() != type) {
-    return nullptr;
-  }
-  return result;
+  return it->second.get();
 }
 
 void Value::SetKey(std::string const& key, std::unique_ptr<Value> value) {

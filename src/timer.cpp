@@ -4,9 +4,9 @@
 
 namespace dux {
 
-timespec TimespecDiff(timespec const &a, timespec const &b) {
+timespec TimespecDiff(timespec const& a, timespec const& b) {
   timespec result;
-  result.tv_sec  = a.tv_sec  - b.tv_sec;
+  result.tv_sec = a.tv_sec - b.tv_sec;
   result.tv_nsec = a.tv_nsec - b.tv_nsec;
   if (result.tv_nsec < 0) {
     --result.tv_sec;

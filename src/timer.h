@@ -7,7 +7,7 @@
 
 namespace dux {
 
-timespec TimespecDiff(timespec const &a, timespec const &b);
+timespec TimespecDiff(timespec const& a, timespec const& b);
 
 class Timer {
  public:

@@ -37,6 +37,8 @@ add_executable(
     src/timer.h
     src/value.cpp
     src/value.h
+    src/value_from_to.cpp
+    src/value_from_to.h
     src/value_serialization.cpp
     src/value_serialization.h
     test/background_task_runner_test.cpp

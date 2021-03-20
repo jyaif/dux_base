@@ -1,12 +1,40 @@
 #include <cassert>
 #include <cstdio>
+#include <map>
+#include <string>
 
 #include "value_test.h"
 
 #include "value.h"
+#include "value_from_to.h"
 #include "value_serialization.h"
 
+void TestToFromValueMap() {
+  std::map<std::string, int64_t> m, m2;
+  m["foo"] = 42;
+  m["bar"] = 420;
+  auto value = dux::ToValue(m);
+  assert(FromValue(value.get(), m2));
+  assert(m2.size() == 2);
+  assert(m2["foo"] == 42);
+  assert(m2["bar"] == 420);
+}
+
+void TestToFromValueVector() {
+  std::vector<int64_t> v, v2;
+  v.push_back(19);
+  v.push_back(86);
+  auto value = dux::ToValue(v);
+  assert(FromValue(value.get(), v2));
+  assert(v2.size() == 2);
+  assert(v2[0] == 19);
+  assert(v2[1] == 86);
+}
+
 void TestValue() {
+  TestToFromValueMap();
+  TestToFromValueVector();
+
   dux::Value v0(true);
   assert(v0.IsBool());
   assert(v0.GetBool() == true);

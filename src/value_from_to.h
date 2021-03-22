@@ -11,6 +11,10 @@ namespace dux {
 [[nodiscard]] bool FromValue(dux::Value const* value, int64_t& dest);
 std::unique_ptr<dux::Value> ToValue(int64_t const& src);
 
+// int32_t
+[[nodiscard]] bool FromValue(dux::Value const* value, int32_t& dest);
+std::unique_ptr<dux::Value> ToValue(int32_t const& src);
+
 // std::string
 [[nodiscard]] bool FromValue(dux::Value const* value, std::string& dest);
 std::unique_ptr<dux::Value> ToValue(std::string const& src);
@@ -20,7 +24,7 @@ template <typename T>
 [[nodiscard]] bool FromValue(dux::Value const* value, std::vector<T>& dest) {
   dest.clear();
   if (!value) {
-    return true;
+    return false;
   }
   if (!value->IsList()) {
     return false;
@@ -37,12 +41,8 @@ template <typename T>
   return true;
 }
 
-// Returns null if |elements| is empty.
 template <typename T>
 std::unique_ptr<dux::Value> ToValue(std::vector<T> const& elements) {
-  if (elements.empty()) {
-    return std::unique_ptr<dux::Value>();
-  }
   auto value = std::make_unique<dux::Value>(dux::Value::Type::LIST);
   auto& vec = value->GetList();
   for (auto const& element : elements) {
@@ -57,7 +57,7 @@ template <typename T>
                              std::map<std::string, T>& dest) {
   dest.clear();
   if (!value) {
-    return true;
+    return false;
   }
   if (!value->IsDictionary()) {
     return false;
@@ -74,12 +74,8 @@ template <typename T>
   return true;
 }
 
-// Returns null if |elements| is empty.
 template <typename T>
 std::unique_ptr<dux::Value> ToValue(std::map<std::string, T> const& map) {
-  if (map.empty()) {
-    return std::unique_ptr<dux::Value>();
-  }
   auto value = std::make_unique<dux::Value>(dux::Value::Type::DICTIONARY);
   auto& dic = value->GetDictionary();
   for (auto const& it : map) {

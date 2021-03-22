@@ -24,12 +24,10 @@ void WriteValueToStream(Value const& value, dux::OStream& s) {
       int64_t number_of_entries = dict.size();
       s.Write(number_of_entries);
       for (auto& e : dict) {
-        if (e.second) {
-          std::string const& key = e.first;
-          Value const& value_from_dict = *e.second;
-          s.Write(key);
-          WriteValueToStream(value_from_dict, s);
-        }
+        std::string const& key = e.first;
+        Value const& value_from_dict = *e.second;
+        s.Write(key);
+        WriteValueToStream(value_from_dict, s);
       }
     } break;
     case Value::Type::LIST: {

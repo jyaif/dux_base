@@ -3,10 +3,6 @@
 namespace dux {
 
 [[nodiscard]] bool FromValue(dux::Value const* value, int64_t& dest) {
-  if (value == nullptr) {
-    dest = 0;
-    return true;
-  }
   if (!value->IsInt64()) {
     return false;
   }
@@ -18,10 +14,23 @@ std::unique_ptr<dux::Value> ToValue(int64_t const& src) {
   return std::make_unique<dux::Value>(src);
 }
 
+[[nodiscard]] bool FromValue(dux::Value const* value, int32_t& dest) {
+  int64_t dest2;
+  bool v = FromValue(value, dest2);
+  if (v) {
+    dest = dest2;
+    return true;
+  }
+  return false;
+}
+
+std::unique_ptr<dux::Value> ToValue(int32_t const& src) {
+  return std::make_unique<dux::Value>(src);
+}
+
 [[nodiscard]] bool FromValue(dux::Value const* value, std::string& dest) {
   if (value == nullptr) {
-    dest = "";
-    return true;
+    return false;
   }
   if (!value->IsString()) {
     return false;

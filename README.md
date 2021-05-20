@@ -7,14 +7,14 @@ A few C++17 utils to make life easier.
 ```
 mkdir out
 cd out
-cmake ..
+cmake ../test/
 make
-./dux_base_test_bin
+./dux_base_test
 ```
 
 for Xcode:
 ```
 mkdir -p out2
 cd out2
-cmake -G "Xcode" ..
+cmake -G "Xcode" ../test/
 ```

@@ -19,6 +19,6 @@ compiler:
 script:
   - mkdir out
   - cd out
-  - cmake ..
+  - cmake ../test/
   - make
-  - ./dux_base_test_bin
+  - ./dux_base_test

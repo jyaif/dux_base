@@ -9,6 +9,8 @@
 
 #include "murmurhash3.h"
 
+#pragma clang diagnostic ignored "-Wcast-align"
+
 //-----------------------------------------------------------------------------
 // Platform-specific functions and macros
 

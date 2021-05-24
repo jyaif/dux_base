@@ -17,7 +17,7 @@ void FPSCounter::Update() {
   }
 }
 
-float FPSCounter::GetFPS() {
+size_t FPSCounter::GetFPS() {
   return last_fps_;
 }
 

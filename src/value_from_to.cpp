@@ -18,7 +18,7 @@ std::unique_ptr<dux::Value> ToValue(int64_t const& src) {
   int64_t dest2;
   bool v = FromValue(value, dest2);
   if (v) {
-    dest = dest2;
+    dest = static_cast<int32_t>(dest2);
     return true;
   }
   return false;

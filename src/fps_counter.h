@@ -1,7 +1,6 @@
 #ifndef DUX_BASE_SRC_FPS_COUNTER_H_
 #define DUX_BASE_SRC_FPS_COUNTER_H_
 
-#include <sys/time.h>
 #include <chrono>
 
 namespace dux {
@@ -12,7 +11,7 @@ class FPSCounter {
   void Update();
 
   // Returns the last measured FPS.
-  float GetFPS();
+  size_t GetFPS();
 
  private:
   std::chrono::steady_clock::time_point start_of_measurement_;

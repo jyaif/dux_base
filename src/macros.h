@@ -13,7 +13,7 @@
 
 // To use, define _LIBCPP_ENABLE_THREAD_SAFETY_ANNOTATIONS at the project level,
 // and compile with -Wthread-safety
-#if _LIBCPP_ENABLE_THREAD_SAFETY_ANNOTATIONS
+#if !OS_WINDOWS && _LIBCPP_ENABLE_THREAD_SAFETY_ANNOTATIONS
 #define GUARDED_BY(guard) __attribute__((guarded_by(guard)))
 #define EXCLUSIVE_LOCKS_REQUIRED(...) \
   __attribute__((exclusive_locks_required(__VA_ARGS__)))

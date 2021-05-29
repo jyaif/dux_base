@@ -31,9 +31,9 @@ template <typename T>
   }
 
   auto& vec_of_values = value->GetList();
-  for (auto& value : vec_of_values) {
+  for (auto& v : vec_of_values) {
     T o;
-    if (!dux::FromValue(value.get(), o)) {
+    if (!dux::FromValue(v.get(), o)) {
       return false;
     }
     dest.push_back(o);
@@ -64,12 +64,12 @@ template <typename T>
   }
 
   auto& map_of_values = value->GetDictionary();
-  for (auto& value : map_of_values) {
+  for (auto& v : map_of_values) {
     T o;
-    if (!dux::FromValue(value.second.get(), o)) {
+    if (!dux::FromValue(v.second.get(), o)) {
       return false;
     }
-    dest[value.first] = o;
+    dest[v.first] = o;
   }
   return true;
 }

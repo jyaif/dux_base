@@ -31,6 +31,22 @@ void TestToFromValueVector() {
   assert(v2[1] == 86);
 }
 
+void TestAssignValueFromKeyIfAvailable() {
+  std::map<std::string, int64_t> m, m2;
+  m["foo"] = 42;
+  m["bar"] = 420;
+  auto value = dux::ToValue(m);
+  int64_t foo = -1;
+  int64_t qux = -1;
+  std::string baz;
+  value->AssignValueFromKeyIfAvailable("foo", foo);
+  value->AssignValueFromKeyIfAvailable("qux", qux);
+  value->AssignValueFromKeyIfAvailable("baz", baz);
+  assert(foo == 42);
+  assert(qux == -1);
+  assert(baz.empty());
+}
+
 void TestValue() {
   TestToFromValueMap();
   TestToFromValueVector();

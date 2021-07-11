@@ -124,6 +124,22 @@ const Value* Value::FindKey(std::string const& key) const {
   return it->second.get();
 }
 
+void Value::AssignValueFromKeyIfAvailable(std::string const& key, std::string &value) const {
+  assert(IsDictionary());
+  auto val = FindKeyOfType(key, Type::STRING);
+  if (val) {
+    value = val->GetString();
+  }
+}
+
+void Value::AssignValueFromKeyIfAvailable(std::string const& key, int64_t &value) const {
+  assert(IsDictionary());
+  auto val = FindKeyOfType(key, Type::INT64);
+  if (val) {
+    value = val->GetInt64();
+  }
+}
+
 void Value::SetKey(std::string const& key, std::unique_ptr<Value> value) {
   assert(IsDictionary());
   dictionary_[key] = std::move(value);

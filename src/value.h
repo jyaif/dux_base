@@ -52,6 +52,8 @@ class Value {
   Value* FindKeyOfType(std::string const& key, Type type);
   const Value* FindKeyOfType(std::string const& key, Type type) const;
   const Value* FindKey(std::string const& key) const;
+  void AssignValueFromKeyIfAvailable(std::string const& key, std::string &value) const;
+  void AssignValueFromKeyIfAvailable(std::string const& key, int64_t &value) const;
 
   void SetKey(std::string const& key, std::unique_ptr<Value> value);
   bool RemoveKey(std::string const& key);

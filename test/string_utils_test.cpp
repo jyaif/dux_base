@@ -12,6 +12,16 @@ void VecEq(std::vector<std::string> v1, std::vector<std::string> v2) {
 }
 
 void TestStringUtils() {
+  assert(dux::TrimSpaces("") == "");
+  assert(dux::TrimSpaces("   ") == "");
+  assert(dux::TrimSpaces("A") == "A");
+  assert(dux::TrimSpaces("ABC") == "ABC");
+  assert(dux::TrimSpaces("  ABC") == "ABC");
+  assert(dux::TrimSpaces("ABC  ") == "ABC");
+  assert(dux::TrimSpaces("  ABC  ") == "ABC");
+  assert(dux::TrimSpaces("  A  B  C    ") == "A  B  C");
+  assert(dux::TrimSpaces("     A  B  C ") == "A  B  C");
+
   VecEq(dux::SplitNewLines("A"), {"A"});
   VecEq(dux::SplitNewLines("\n"), {""});
   VecEq(dux::SplitNewLines("A\nA"), {"A", "A"});

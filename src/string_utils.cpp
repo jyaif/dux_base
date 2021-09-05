@@ -5,6 +5,18 @@
 
 namespace dux {
 
+std::string TrimSpaces(std::string const& s) {
+  int start = 0;
+  while (start < s.size() && s[start] == ' ') {
+    start++;
+  }
+  int end = s.size() - 1;
+  while (end >= start && s[end] == ' ') {
+    end--;
+  }
+  return s.substr(start, end - start + 1);
+}
+
 std::vector<std::string> SplitNewLines(std::string const& string) {
   std::vector<std::string> lines;
 

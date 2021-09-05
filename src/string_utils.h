@@ -7,6 +7,9 @@
 
 namespace dux {
 
+// Removes the leading and trailing spaces.
+std::string TrimSpaces(std::string const& s);
+
 std::vector<std::string> SplitNewLines(std::string const& string);
 std::vector<std::string> SplitString(std::string const& string,
                                      std::string const& delim);

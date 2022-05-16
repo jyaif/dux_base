@@ -71,10 +71,13 @@ class ObserverList {
 
   void PrepareObserverListForIteration() {
     if (deletion_count_ > 0) {
-      for (ObserverType*& tempObserver : observers_) {
+      size_t count = observers_.size();
+      for (size_t i = 0; i < count ; i++) {
+        ObserverType*& tempObserver = observers_[i];
         if (tempObserver == nullptr) {
           tempObserver = observers_.back();
           observers_.pop_back();
+          count--;
           deletion_count_--;
           if (deletion_count_ == 0) {
             break;

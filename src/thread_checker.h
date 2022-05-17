@@ -1,9 +1,10 @@
 #ifndef DUX_BASE_THREAD_CHECKER_H_
 #define DUX_BASE_THREAD_CHECKER_H_
 
-#include <pthread.h>
-
 namespace dux {
+
+#ifndef _WIN32
+#include <pthread.h>
 
 class ThreadChecker final {
  public:
@@ -18,6 +19,19 @@ class ThreadChecker final {
  private:
   const pthread_t self_;
 };
+
+#else
+
+class ThreadChecker final {
+ public:
+  ThreadChecker() {}
+  ~ThreadChecker() {}
+  bool IsCreationThreadCurrent() const {
+    return true;
+  }
+};
+
+#endif
 
 }  // namespace dux
 #endif  // DUX_BASE_THREAD_CHECKER_H_

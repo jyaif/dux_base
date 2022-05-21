@@ -41,7 +41,7 @@ void TestBackgroundTaskRunner() {
     }
     std::this_thread::sleep_for(std::chrono::milliseconds(50));
     assert(v == 0);
-    std::this_thread::sleep_for(std::chrono::milliseconds(150));
+    std::this_thread::sleep_for(std::chrono::milliseconds(250));
     assert(v == 2);
   }
 }

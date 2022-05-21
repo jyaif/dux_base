@@ -24,7 +24,7 @@ class TestObserverWithLambda : public TestObserver {
 };
 
 template <class T>
-void TemplatedTestObserverList(bool skip_reentrency_tests) {
+void TemplatedTestObserverList() {
   T observer_list;
   TestObserver observer_1;
   TestObserver observer_2;
@@ -57,9 +57,7 @@ void TemplatedTestObserverList(bool skip_reentrency_tests) {
   observer_list.RemoveObserver(&observer_2);
   assert(observer_list.ObserverCount() == 0);
 
-  if (skip_reentrency_tests) {
-    return;
-  }
+  // Start of the reentrancy tests.
 
   // Test that modifying the observer list while iterating over it works.
   TestObserver observer_3;
@@ -85,7 +83,5 @@ void TemplatedTestObserverList(bool skip_reentrency_tests) {
 }
 
 void TestObserverList() {
-  TemplatedTestObserverList<dux::ObserverList<TestObserver>>(false);
-  // ThreadSafeObserverList deadlocks in case of re-entrancy.
-  TemplatedTestObserverList<dux::ThreadSafeObserverList<TestObserver>>(true);
+  TemplatedTestObserverList<dux::ObserverList<TestObserver>>();
 }

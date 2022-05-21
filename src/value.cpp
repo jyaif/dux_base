@@ -124,7 +124,8 @@ const Value* Value::FindKey(std::string const& key) const {
   return it->second.get();
 }
 
-void Value::AssignValueFromKeyIfAvailable(std::string const& key, std::string &value) const {
+void Value::AssignValueFromKeyIfAvailable(std::string const& key,
+                                          std::string& value) const {
   assert(IsDictionary());
   auto val = FindKeyOfType(key, Type::STRING);
   if (val) {
@@ -132,7 +133,8 @@ void Value::AssignValueFromKeyIfAvailable(std::string const& key, std::string &v
   }
 }
 
-void Value::AssignValueFromKeyIfAvailable(std::string const& key, int64_t &value) const {
+void Value::AssignValueFromKeyIfAvailable(std::string const& key,
+                                          int64_t& value) const {
   assert(IsDictionary());
   auto val = FindKeyOfType(key, Type::INT64);
   if (val) {

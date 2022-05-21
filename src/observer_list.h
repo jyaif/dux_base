@@ -9,38 +9,38 @@
 #include <vector>
 
 #include "macros.h"
+#include "thread_checker.h"
 
 namespace dux {
 
 template <class ObserverType>
-class ObserverLink {
-  ObserverType* observer_ = nullptr;
-  ObserverLink<ObserverType>* next_ = nullptr;
-};
-
-template <class ObserverType>
 // Class is not thread safe.
+// Class supports some reentrancy:
+// * You can add and remove observers while the `ForEachObserver` is running.
+// * You must not call `ForEachObserver` from within a call of `ForEachObserver`.
 class ObserverList {
  public:
-  // Add an observer to the list.  An observer should not be added to
-  // the same list more than once.
+  // Adds an observer to the list.
+  // An observer must not be added to the same list more than once.
   void AddObserver(ObserverType* observer) {
-    new_observers_.push_back(observer);
+#ifndef NDEBUG
+    assert(thread_checker_.IsCreationThreadCurrent());
+    for (ObserverType*& temp_observer : observers_) {
+      assert(observer != temp_observer);
+    }
+#endif
+    observers_.push_back(observer);
   }
 
-  // Remove an observer from the list if it is in the list.
+  // Removes an observer from the list.
+  // The observer must be present in the list.
   void RemoveObserver(ObserverType* observer) {
+#ifndef NDEBUG
+    assert(thread_checker_.IsCreationThreadCurrent());
+#endif
     for (ObserverType*& temp_observer : observers_) {
       if (observer == temp_observer) {
         temp_observer = nullptr;
-        deletion_count_++;
-        return;
-      }
-    }
-    for (ObserverType*& temp_observer : new_observers_) {
-      if (observer == temp_observer) {
-        temp_observer = new_observers_.back();
-        new_observers_.pop_back();
         return;
       }
     }
@@ -48,156 +48,62 @@ class ObserverList {
   }
 
   void ForEachObserver(std::function<void(ObserverType&)> callback) {
-    PrepareObserverListForIteration();
-    for (ObserverType* observer : observers_) {
+#ifndef NDEBUG
+    assert(thread_checker_.IsCreationThreadCurrent());
+    assert(!for_each_is_running_);
+    for_each_is_running_ = true;
+#endif
+
+    for (size_t i = 0; i < observers_.size(); i++) {
+      ObserverType* observer = observers_[i];
       if (observer) {
         callback(*observer);
       }
     }
+    DefragmentList();
+#ifndef NDEBUG
+    for_each_is_running_ = false;
+#endif
   }
 
 #ifndef NDEBUG
   // For tests only.
-  int ObserverCount() {
+  int ObserverCount() const {
     int count = 0;
     for (auto const& observer : observers_) {
       if (observer != nullptr) {
         count++;
       }
     }
-    return count + new_observers_.size();
+    return count;
   }
 #endif
 
-  void PrepareObserverListForIteration() {
-    if (deletion_count_ > 0) {
-      size_t count = observers_.size();
-      for (size_t i = 0; i < count ; i++) {
-        ObserverType*& tempObserver = observers_[i];
-        if (tempObserver == nullptr) {
-          tempObserver = observers_.back();
-          observers_.pop_back();
-          count--;
-          deletion_count_--;
-          if (deletion_count_ == 0) {
-            break;
-          }
-        }
+  // Removes holes in the list caused by the removal of observers.
+  void DefragmentList() {
+    // Iterate over the observers, filling the holes by swapping with the
+    // last element of the array.
+    int32_t count = observers_.size();
+    // `i` and `count` need to be int32s because `i` can become negative.
+    for (int32_t i = 0; i < count; i++) {
+      if (observers_[i] == nullptr) {
+        observers_[i] = observers_.back();
+        count--;
+        observers_.pop_back();
+        // This is to handle the case where the last element of the vector was
+        // nullptr.
+        i--;
       }
-    }
-    if (!new_observers_.empty()) {
-      observers_.insert(std::end(observers_), std::begin(new_observers_),
-                        std::end(new_observers_));
-      new_observers_.clear();
     }
   }
 
   // A vector is used to keep the order of the observers deterministic.
   // Do not change to std::set.
   std::vector<ObserverType*> observers_;
-  std::vector<ObserverType*> new_observers_;
-  int deletion_count_ = 0;
-};
-
-#define FOR_EACH_OBSERVER(ObserverType, observerList, func)   \
-  do {                                                        \
-    observerList.PrepareObserverListForIteration();           \
-    for (ObserverType * observer : observerList.observers_) { \
-      if (observer) {                                         \
-        observer->func;                                       \
-      }                                                       \
-    }                                                         \
-  } while (0)
-
-// Deadlocks in case of re-entrance.
-template <class ObserverType>
-class ThreadSafeObserverList {
- public:
-  // Add an observer to the list.  An observer should not be added to
-  // the same list more than once.
-  void AddObserver(ObserverType* observer) {
-    std::lock_guard<std::mutex> guard(new_observers_mutex_);
-    new_observers_.push_back(observer);
-  }
-
-  // Remove an observer from the list if it is in the list.
-  void RemoveObserver(ObserverType* observer) {
-    std::lock_guard<std::mutex> guard(delete_observers_mutex_);
-    delete_observers_.push_back(observer);
-  }
-
-  void ForEachObserver(std::function<void(ObserverType&)> callback) {
-    PrepareObserverListForIteration();
-    std::lock_guard<std::mutex> guard(observers_mutex_);
-    for (ObserverType* observer : observers_) {
-      std::lock_guard<std::mutex> delete_guard(delete_observers_mutex_);
-      if (observer) {
-        if (!delete_observers_.empty()) {
-          for (ObserverType* observer_to_delete : delete_observers_) {
-            if (observer == observer_to_delete) {
-              continue;
-            }
-          }
-        }
-        callback(*observer);
-      }
-    }
-  }
-
 #ifndef NDEBUG
-  // For tests only.
-  int ObserverCount() {
-    std::lock_guard<std::mutex> guard(delete_observers_mutex_);
-    std::lock_guard<std::mutex> guard2(new_observers_mutex_);
-    std::lock_guard<std::mutex> guard3(observers_mutex_);
-    int count = 0;
-    for (auto const& observer : observers_) {
-      if (observer != nullptr) {
-        count++;
-      }
-    }
-    return count + new_observers_.size() - delete_observers_.size();
-  }
+  ThreadChecker thread_checker_;
+  bool for_each_is_running_ = false;
 #endif
-
- private:
-  void PrepareObserverListForIteration() {
-    {
-      std::lock_guard<std::mutex> guard(delete_observers_mutex_);
-      if (!delete_observers_.empty()) {
-        std::lock_guard<std::mutex> guard2(observers_mutex_);
-        for (ObserverType*& observer : observers_) {
-          for (auto* observer_to_delete : delete_observers_) {
-            if (observer == observer_to_delete) {
-              observer = observers_.back();
-              observers_.pop_back();
-            }
-          }
-        }
-        delete_observers_.clear();
-      }
-    }
-    {
-      std::lock_guard<std::mutex> guard(new_observers_mutex_);
-      std::lock_guard<std::mutex> guard2(observers_mutex_);
-      if (!new_observers_.empty()) {
-        observers_.insert(std::end(observers_), std::begin(new_observers_),
-                          std::end(new_observers_));
-        new_observers_.clear();
-      }
-    }
-  }
-
-  // A vector is used to keep the order of the observers deterministic.
-  // Do not change to std::set.
-  std::vector<ObserverType*> observers_ GUARDED_BY(observers_mutex_);
-  std::vector<ObserverType*> new_observers_ GUARDED_BY(new_observers_mutex_);
-  std::vector<ObserverType*> delete_observers_
-      GUARDED_BY(delete_observers_mutex_);
-  std::mutex observers_mutex_;
-  std::mutex new_observers_mutex_;
-  std::mutex delete_observers_mutex_;
-  int deletion_count_ = 0;
 };
 
 }  // namespace dux

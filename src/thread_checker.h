@@ -26,9 +26,7 @@ class ThreadChecker final {
  public:
   ThreadChecker() {}
   ~ThreadChecker() {}
-  bool IsCreationThreadCurrent() const {
-    return true;
-  }
+  bool IsCreationThreadCurrent() const { return true; }
 };
 
 #endif

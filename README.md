@@ -1,8 +1,7 @@
 # dux_base
 
-[![Build Status](https://api.travis-ci.org/jyaif/dux_base.svg)](https://travis-ci.org/jyaif/dux_base)
-
 A few C++17 utils to make life easier.
+/!\ Warning: Non-stable API!
 
 ```
 mkdir out

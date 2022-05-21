@@ -12,6 +12,10 @@ add_compile_options("-D _LIBCPP_ENABLE_THREAD_SAFETY_ANNOTATIONS")
 add_compile_options("-Wthread-safety")
 endif()
 
+if (WIN32)
+add_compile_options("-D _USE_MATH_DEFINES")
+endif()
+
 add_executable(
   dux_base_test
   background_task_runner_test.cpp
@@ -29,4 +33,10 @@ add_executable(
   value_test.h
 )
 
-target_link_libraries(dux_base_test PRIVATE dux_base pthread)
+if(WIN32)
+  set(PLATFORM_THREAD_LIBRARY Ws2_32.lib)
+else()
+  set(PLATFORM_THREAD_LIBRARY pthread)
+endif()
+
+target_link_libraries(dux_base_test PRIVATE dux_base ${PLATFORM_THREAD_LIBRARY})

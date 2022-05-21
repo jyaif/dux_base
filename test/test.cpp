@@ -134,6 +134,7 @@ void SomeThread(std::pair<dux::ThreadChecker*, bool*> params) {
 }
 
 void TestThreadChecker() {
+#ifndef _WIN32
   bool thread_ran = false;
   dux::ThreadChecker thread_checker;
   assert(thread_checker.IsCreationThreadCurrent());
@@ -141,6 +142,7 @@ void TestThreadChecker() {
                                 &thread_checker, &thread_ran));
   t.join();
   assert(thread_ran);
+#endif
 }
 
 void TestTaskRunner() {

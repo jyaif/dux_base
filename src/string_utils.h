@@ -25,9 +25,9 @@ std::string StringFormat(const std::string& format, Args... args) {
   }
 
 #if defined(_WIN32)
-  #define POSITIONAL_SPRINTF 	_sprintf_p
+#define POSITIONAL_SPRINTF _sprintf_p
 #else
-  #define POSITIONAL_SPRINTF 	snprintf
+#define POSITIONAL_SPRINTF snprintf
 #endif
 
   std::unique_ptr<char[]> buf(new char[size]);

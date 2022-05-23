@@ -11,19 +11,22 @@
 #include "macros.h"
 #include "thread_checker.h"
 
+#define ENABLE_DEBUG_CHECKS false
+
 namespace dux {
 
 template <class ObserverType>
 // Class is not thread safe.
 // Class supports some reentrancy:
 // * You can add and remove observers while the `ForEachObserver` is running.
-// * You must not call `ForEachObserver` from within a call of `ForEachObserver`.
+// * You must not call `ForEachObserver` from within a call of
+// `ForEachObserver`.
 class ObserverList {
  public:
   // Adds an observer to the list.
   // An observer must not be added to the same list more than once.
   void AddObserver(ObserverType* observer) {
-#ifndef NDEBUG
+#if ENABLE_DEBUG_CHECKS
     assert(thread_checker_.IsCreationThreadCurrent());
     for (ObserverType*& temp_observer : observers_) {
       assert(observer != temp_observer);
@@ -35,7 +38,7 @@ class ObserverList {
   // Removes an observer from the list.
   // The observer must be present in the list.
   void RemoveObserver(ObserverType* observer) {
-#ifndef NDEBUG
+#if ENABLE_DEBUG_CHECKS
     assert(thread_checker_.IsCreationThreadCurrent());
 #endif
     for (ObserverType*& temp_observer : observers_) {
@@ -48,7 +51,7 @@ class ObserverList {
   }
 
   void ForEachObserver(std::function<void(ObserverType&)> callback) {
-#ifndef NDEBUG
+#if ENABLE_DEBUG_CHECKS
     assert(thread_checker_.IsCreationThreadCurrent());
     assert(!for_each_is_running_);
     for_each_is_running_ = true;
@@ -61,7 +64,7 @@ class ObserverList {
       }
     }
     DefragmentList();
-#ifndef NDEBUG
+#if ENABLE_DEBUG_CHECKS
     for_each_is_running_ = false;
 #endif
   }
@@ -100,7 +103,7 @@ class ObserverList {
   // A vector is used to keep the order of the observers deterministic.
   // Do not change to std::set.
   std::vector<ObserverType*> observers_;
-#ifndef NDEBUG
+#if ENABLE_DEBUG_CHECKS
   ThreadChecker thread_checker_;
   bool for_each_is_running_ = false;
 #endif

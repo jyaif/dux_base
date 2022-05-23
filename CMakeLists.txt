@@ -15,6 +15,7 @@ add_library(
   src/macros.h
   src/murmurhash3.h
   src/murmurhash3.cpp
+  src/observer_list.h
   src/scope_guard.cpp
   src/scope_guard.h
   src/stream.cpp
@@ -23,6 +24,7 @@ add_library(
   src/string_utils.h
   src/task_runner.cpp
   src/task_runner.h
+  src/thread_checker.h
   
   
   src/value.cpp

@@ -24,9 +24,10 @@ class ThreadChecker final {
 
 class ThreadChecker final {
  public:
-  ThreadChecker() {}
-  ~ThreadChecker() {}
-  bool IsCreationThreadCurrent() const { return true; }
+  ThreadChecker();
+  bool IsCreationThreadCurrent() const;
+ private:
+  const int thread_id_;
 };
 
 #endif

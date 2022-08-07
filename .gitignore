@@ -5,4 +5,8 @@ out2/
 # macOS
 .DS_Store
 
+# windows
+build
+test/build
+
 .vscode

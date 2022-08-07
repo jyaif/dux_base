@@ -24,8 +24,8 @@ add_library(
   src/string_utils.h
   src/task_runner.cpp
   src/task_runner.h
+  src/thread_checker.cpp
   src/thread_checker.h
-  
   
   src/value.cpp
   src/value.h

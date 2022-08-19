@@ -6,11 +6,14 @@
 namespace dux {
 
 std::string TrimSpaces(std::string const& s) {
-  int start = 0;
+  if (s.empty()) {
+    return s;
+  }
+  size_t start = 0;
   while (start < s.size() && s[start] == ' ') {
     start++;
   }
-  int end = s.size() - 1;
+  size_t end = s.size() - 1;
   while (end >= start && s[end] == ' ') {
     end--;
   }

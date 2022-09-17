@@ -38,11 +38,6 @@ class Pool {
     }
 
     void Reset() {
-        size_t prevented = std::min(used_, regular_pool_.size());
-        size_t not_prevented = overflow_.size();
-        
-
-        LOG(INFO) << "Allocation prevented: " << prevented << " not prevented: " << not_prevented;
         overflow_.clear();
 
         usage_history_.SaveToBuffer(used_);

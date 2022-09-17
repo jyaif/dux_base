@@ -13,6 +13,8 @@ class Value {
  public:
   using DictionaryStorage = std::map<std::string, std::unique_ptr<Value>>;
   using ListStorage = std::vector<std::unique_ptr<Value>>;
+  using StringStorage = std::string;
+
 
   enum class Type : uint8_t {
     NONE = 0,
@@ -30,7 +32,7 @@ class Value {
   explicit Value(std::string const& in_string);
   explicit Value(char const* in_string);
   Value(Value&& other) noexcept;
-  virtual ~Value();
+  ~Value();
 
   Type GetType() const { return type_; }
 

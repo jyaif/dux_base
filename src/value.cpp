@@ -1,6 +1,7 @@
 #include "value.h"
 
 #include <cassert>
+#include <string>
 
 namespace dux {
 
@@ -62,7 +63,23 @@ Value::Value(Value&& other) noexcept {
   }
 }
 
-Value::~Value(){};
+Value::~Value(){
+  switch (type_) {
+    case Type::NONE:
+    case Type::BOOLEAN:
+    case Type::INT64:
+      break;
+    case Type::STRING:
+      string_value_.~StringStorage();
+      break;
+    case Type::DICTIONARY:
+      dictionary_.~DictionaryStorage();
+      break;
+    case Type::LIST:
+      list_.~ListStorage();
+      break;
+  }
+};
 
 bool Value::GetBool() const {
   assert(IsBool());

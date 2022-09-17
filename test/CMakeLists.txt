@@ -26,6 +26,8 @@ add_executable(
   interpolate_test.h
   observer_list_test.cpp
   observer_list_test.h
+  pool_test.cpp
+  ring_buffer_test.cpp
   string_utils_test.cpp
   string_utils_test.h
   test.cpp

@@ -29,6 +29,8 @@ void TestStream();
 void SomeThread(std::pair<dux::ThreadChecker*, bool*> params);
 void TestThreadChecker();
 void TestWeakPtrFactory();
+void TestRingBuffer();
+void TestPool();
 
 void TestBaseTypeWrapper() {
   dux::BaseTypeWrapper<int64_t> v(11);
@@ -221,6 +223,8 @@ int main(int argc, char* argv[]) {
   TestValue();
   TestCopyableLambda();
   TestInterpolation();
+  TestRingBuffer();
+  TestPool();
   printf("tests successfully passed\n");
   return EXIT_SUCCESS;
 }

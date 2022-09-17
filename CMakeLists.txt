@@ -16,6 +16,8 @@ add_library(
   src/murmurhash3.h
   src/murmurhash3.cpp
   src/observer_list.h
+  src/pool.h
+  src/ring_buffer.h
   src/scope_guard.cpp
   src/scope_guard.h
   src/stream.cpp

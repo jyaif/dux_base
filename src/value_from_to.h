@@ -52,6 +52,8 @@ std::unique_ptr<dux::Value> ToValue(std::vector<T> const& elements) {
 }
 
 // std::map
+
+// std::map<string, T>
 template <typename T>
 [[nodiscard]] bool FromValue(dux::Value const* value,
                              std::map<std::string, T>& dest) {
@@ -83,6 +85,47 @@ std::unique_ptr<dux::Value> ToValue(std::map<std::string, T> const& map) {
   }
   return value;
 }
+
+// std::map<T, U>
+// T must have a `raw_` std::string field, and be initializable
+// with  T{std::string}.
+// (these requirements are subject to changing).
+template <typename T, typename U>
+typename std::enable_if<!std::is_same<T, std::string>::value,
+                                        bool>::type
+FromValue(dux::Value const* value,
+                             std::map<T, U>& dest) {
+  dest.clear();
+  if (!value) {
+    return false;
+  }
+  if (!value->IsDictionary()) {
+    return false;
+  }
+
+  auto& map_of_values = value->GetDictionary();
+  for (auto& v : map_of_values) {
+    U o;
+    if (!dux::FromValue(v.second.get(), o)) {
+      return false;
+    }
+    dest[T{v.first}] = o;
+  }
+  return true;
+}
+
+template <typename T, typename U>
+typename std::enable_if<!std::is_same<T, std::string>::value,
+                                        std::unique_ptr<dux::Value>>::type
+ToValue(std::map<T, U> const& map) {
+  auto value = std::make_unique<dux::Value>(dux::Value::Type::DICTIONARY);
+  auto& dic = value->GetDictionary();
+  for (auto const& it : map) {
+    dic[it.first.raw_] = dux::ToValue(it.second);
+  }
+  return value;
+}
+
 
 }  // namespace dux
 

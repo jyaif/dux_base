@@ -20,6 +20,23 @@ void TestToFromValueMap() {
   assert(m2["bar"] == 420);
 }
 
+void TestToFromValueMap2() {
+  struct WrappedStr {
+    std::string raw_;
+    bool operator<(WrappedStr const& other) const {
+      return other.raw_ < raw_;
+    }
+  }; 
+  std::map<WrappedStr, int64_t> m, m2;
+  m[WrappedStr{"foo"}] = 42;
+  m[WrappedStr{"bar"}] = 420;
+  auto value = dux::ToValue(m);
+  assert(FromValue(value.get(), m2));
+  assert(m2.size() == 2);
+  assert(m2[WrappedStr{"foo"}] == 42);
+  assert(m2[WrappedStr{"bar"}] == 420);
+}
+
 void TestToFromValueVector() {
   std::vector<int64_t> v, v2;
   v.push_back(19);
@@ -49,6 +66,7 @@ void TestAssignValueFromKeyIfAvailable() {
 
 void TestValue() {
   TestToFromValueMap();
+  TestToFromValueMap2();
   TestToFromValueVector();
 
   dux::Value v0(true);

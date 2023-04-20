@@ -17,8 +17,8 @@ bool HasEnding(std::string const& full_string, std::string const& ending);
 bool StartsWith(std::string_view full_string, std::string_view prefix);
 
 template <typename... Args>
-std::string StringFormat(const std::string& format, Args... args) {
-  size_t size = snprintf(nullptr, 0, format.c_str(), args...) +
+std::string StringFormat(const char* format, Args... args) {
+  size_t size = snprintf(nullptr, 0, format, args...) +
                 1;  // Extra space for '\0'
   if (size <= 0) {
     return "";
@@ -31,9 +31,14 @@ std::string StringFormat(const std::string& format, Args... args) {
 #endif
 
   std::unique_ptr<char[]> buf(new char[size]);
-  POSITIONAL_SPRINTF(buf.get(), size, format.c_str(), args...);
+  POSITIONAL_SPRINTF(buf.get(), size, format, args...);
   return std::string(buf.get(),
                      buf.get() + size - 1);  // We don't want the '\0' inside
+}
+
+template <typename... Args>
+std::string StringFormat(const std::string& format, Args... args) {
+  return StringFormat(format, args...);
 }
 
 }  // namespace dux

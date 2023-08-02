@@ -18,8 +18,8 @@ bool StartsWith(std::string_view full_string, std::string_view prefix);
 
 template <typename... Args>
 std::string StringFormat(const char* format, Args... args) {
-  size_t size = snprintf(nullptr, 0, format, args...) +
-                1;  // Extra space for '\0'
+  size_t size =
+      snprintf(nullptr, 0, format, args...) + 1;  // Extra space for '\0'
   if (size <= 0) {
     return "";
   }

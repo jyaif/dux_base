@@ -91,10 +91,8 @@ std::unique_ptr<dux::Value> ToValue(std::map<std::string, T> const& map) {
 // with  T{std::string}.
 // (these requirements are subject to changing).
 template <typename T, typename U>
-typename std::enable_if<!std::is_same<T, std::string>::value,
-                                        bool>::type
-FromValue(dux::Value const* value,
-                             std::map<T, U>& dest) {
+typename std::enable_if<!std::is_same<T, std::string>::value, bool>::type
+FromValue(dux::Value const* value, std::map<T, U>& dest) {
   dest.clear();
   if (!value) {
     return false;
@@ -116,7 +114,7 @@ FromValue(dux::Value const* value,
 
 template <typename T, typename U>
 typename std::enable_if<!std::is_same<T, std::string>::value,
-                                        std::unique_ptr<dux::Value>>::type
+                        std::unique_ptr<dux::Value>>::type
 ToValue(std::map<T, U> const& map) {
   auto value = std::make_unique<dux::Value>(dux::Value::Type::DICTIONARY);
   auto& dic = value->GetDictionary();
@@ -125,7 +123,6 @@ ToValue(std::map<T, U> const& map) {
   }
   return value;
 }
-
 
 }  // namespace dux
 

@@ -15,7 +15,6 @@ class Value {
   using ListStorage = std::vector<std::unique_ptr<Value>>;
   using StringStorage = std::string;
 
-
   enum class Type : uint8_t {
     NONE = 0,
     BOOLEAN,

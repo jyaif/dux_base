@@ -26,6 +26,7 @@ class ThreadChecker final {
  public:
   ThreadChecker();
   bool IsCreationThreadCurrent() const;
+
  private:
   const int thread_id_;
 };

@@ -5,7 +5,6 @@
 
 namespace dux {
 
-
 template <typename T, size_t kSize>
 class RingBuffer {
  public:
@@ -16,15 +15,12 @@ class RingBuffer {
     current_index_++;
   }
 
-  std::array<T, kSize> const& GetRawBuffer() const {
-    return buffer_;
-  }
- 
+  std::array<T, kSize> const& GetRawBuffer() const { return buffer_; }
+
  private:
   std::array<T, kSize> buffer_;
   size_t current_index_;
 };
-
 
 }  // namespace dux
 

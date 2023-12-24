@@ -22,7 +22,7 @@ std::array<uint32_t, 256> GenerateTable() {
 }
 
 uint32_t ComputeCRC32(const void* buffer, size_t length) {
-  static auto table = GenerateTable();
+  static const auto table = GenerateTable();
   uint32_t c = 0xFFFFFFFF;
   const uint8_t* u = static_cast<const uint8_t*>(buffer);
   for (size_t i = 0; i < length; ++i) {

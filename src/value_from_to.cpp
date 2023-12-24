@@ -3,6 +3,9 @@
 namespace dux {
 
 [[nodiscard]] bool FromValue(dux::Value const* value, int64_t& dest) {
+  if (value == nullptr) {
+    return false;
+  }
   if (!value->IsInt64()) {
     return false;
   }

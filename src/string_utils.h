@@ -18,17 +18,17 @@ bool StartsWith(std::string_view full_string, std::string_view prefix);
 
 template <typename... Args>
 std::string StringFormat(const char* format, Args... args) {
-  size_t size =
-      snprintf(nullptr, 0, format, args...) + 1;  // Extra space for '\0'
-  if (size <= 0) {
-    return "";
-  }
-
 #if defined(_WIN32)
 #define POSITIONAL_SPRINTF _sprintf_p
 #else
 #define POSITIONAL_SPRINTF snprintf
 #endif
+
+  size_t size = POSITIONAL_SPRINTF(nullptr, 0, format, args...) +
+                1;  // Extra space for '\0'
+  if (size <= 0) {
+    return "";
+  }
 
   std::unique_ptr<char[]> buf(new char[size]);
   POSITIONAL_SPRINTF(buf.get(), size, format, args...);

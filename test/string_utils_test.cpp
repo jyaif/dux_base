@@ -52,4 +52,8 @@ void TestStringUtils() {
   assert(dux::StringFormat("a %s a", "bb") == "a bb a");
   assert(dux::StringFormat("%1$s %2$s", "aa", "bb") == "aa bb");
   assert(dux::StringFormat("%2$s %1$s", "aa", "bb") == "bb aa");
+  assert(dux::StringFormat("%2$s %1$s %2$s %1$s", "aaa", "bbbb") ==
+         "bbbb aaa bbbb aaa");
+  assert(dux::StringFormat("a %1$s ccc %2$s %3$s", "bb", "dddd", "eeeee") ==
+         "a bb ccc dddd eeeee");
 }

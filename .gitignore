@@ -10,3 +10,4 @@ build
 test/build
 
 .vscode
+.cache

@@ -56,4 +56,12 @@ void TestStringUtils() {
          "bbbb aaa bbbb aaa");
   assert(dux::StringFormat("a %1$s ccc %2$s %3$s", "bb", "dddd", "eeeee") ==
          "a bb ccc dddd eeeee");
+
+  auto s1 = dux::SplitNewLines("aaaa");
+  assert(s1.size() == 1 && s1[0] == "aaaa");
+  auto s2 = dux::SplitNewLines("aaaa\nbbb");
+  assert(s2.size() == 2 && s2[0] == "aaaa" && s2[1] == "bbb");
+  auto s3 = dux::SplitNewLines("aaaa\n\n\nbbb");
+  assert(s3.size() == 4 && s3[0] == "aaaa" && s3[1] == "" && s3[2] == "" &&
+         s3[3] == "bbb");
 }

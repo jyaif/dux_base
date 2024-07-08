@@ -13,7 +13,6 @@ bool ThreadChecker::IsCreationThreadCurrent() const {
   return GetCurrentThreadId() == thread_id_;
 }
 
-
 }  // namespace dux
 
 #endif

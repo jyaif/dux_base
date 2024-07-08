@@ -23,10 +23,8 @@ void TestToFromValueMap() {
 void TestToFromValueMap2() {
   struct WrappedStr {
     std::string raw_;
-    bool operator<(WrappedStr const& other) const {
-      return other.raw_ < raw_;
-    }
-  }; 
+    bool operator<(WrappedStr const& other) const { return other.raw_ < raw_; }
+  };
   std::map<WrappedStr, int64_t> m, m2;
   m[WrappedStr{"foo"}] = 42;
   m[WrappedStr{"bar"}] = 420;

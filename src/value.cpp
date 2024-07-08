@@ -63,7 +63,7 @@ Value::Value(Value&& other) noexcept {
   }
 }
 
-Value::~Value(){
+Value::~Value() {
   switch (type_) {
     case Type::NONE:
     case Type::BOOLEAN:

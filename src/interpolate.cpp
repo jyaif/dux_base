@@ -42,8 +42,8 @@ float InterpolateAngle(float angle_start, float angle_end, float percentage) {
   if (d_angle >= -kPi && d_angle <= kPi) {
     return angle_start + d_angle * percentage;
   }
-  d_angle = fmod(angle_end - angle_start, kTau);
-  float short_angle = fmod(2.f * d_angle, kTau) - d_angle;
+  d_angle = fmodf(angle_end - angle_start, kTau);
+  float short_angle = fmodf(2.f * d_angle, kTau) - d_angle;
   return angle_start + short_angle * percentage;
 }
 

@@ -1,5 +1,6 @@
 #include "string_utils.h"
 
+#include <cstdarg>
 #include <cstring>
 #include <sstream>
 
@@ -61,6 +62,46 @@ bool StartsWith(std::string_view full_string, std::string_view prefix) {
     return false;
   }
   return memcmp(full_string.data(), prefix.data(), prefix.size()) == 0;
+}
+
+std::string StringFormatImpl(const char* format, va_list args) {
+  va_list args2;
+  va_copy(args2, args);
+
+#if defined(_WIN32)
+#define POSITIONAL_VSPRINTF _vsnprintf
+#else
+#define POSITIONAL_VSPRINTF vsnprintf
+#endif
+  size_t size = POSITIONAL_VSPRINTF(nullptr, 0, format, args);
+  size++;  // Extra space for '\0'
+  if (size == 0) {
+    va_end(args2);
+    return "";
+  }
+
+  std::unique_ptr<char[]> buf(new char[size]);
+  POSITIONAL_VSPRINTF(buf.get(), size, format, args2);
+  va_end(args2);
+  return std::string(buf.get(),
+                     buf.get() + size - 1  // We don't want the '\0' inside
+  );
+}
+
+std::string StringFormat(const char* format, ...) {
+  va_list args;
+  va_start(args, format);
+  auto s = StringFormatImpl(format, args);
+  va_end(args);
+  return s;
+}
+
+std::string StringFormat(const std::string_view format, ...) {
+  va_list args;
+  va_start(args, format);
+  auto s = StringFormatImpl(format.data(), args);
+  va_end(args);
+  return s;
 }
 
 }  // namespace dux

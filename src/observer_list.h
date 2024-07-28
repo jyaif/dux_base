@@ -86,7 +86,7 @@ class ObserverList {
   void DefragmentList() {
     // Iterate over the observers, filling the holes by swapping with the
     // last element of the array.
-    int32_t count = observers_.size();
+    int32_t count = (int32_t)observers_.size();
     // `i` and `count` need to be int32s because `i` can become negative.
     for (int32_t i = 0; i < count; i++) {
       if (observers_[i] == nullptr) {

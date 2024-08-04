@@ -64,6 +64,13 @@ bool StartsWith(std::string_view full_string, std::string_view prefix) {
   return memcmp(full_string.data(), prefix.data(), prefix.size()) == 0;
 }
 
+bool StringContainsString(std::string_view main_str, std::string_view substr) {
+  if (main_str.find(substr) != std::string::npos) {
+    return true;
+  }
+  return false;
+}
+
 std::string StringFormatImpl(const char* format, va_list args) {
   va_list args2;
   va_copy(args2, args);

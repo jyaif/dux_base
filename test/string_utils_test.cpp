@@ -49,6 +49,9 @@ void TestStringUtils() {
   assert(dux::StartsWith("XYZ", "XYZ") == true);
   assert(dux::StartsWith("XYZ.ABC", "XYZ") == true);
 
+  assert(dux::StringContainsString("abcdef", "bcd") == true);
+  assert(dux::StringContainsString("abcdef", "bXd") == false);
+
   assert(dux::StringFormat("a %s a", "bb") == "a bb a");
   assert(dux::StringFormat("%1$s %2$s", "aa", "bb") == "aa bb");
   assert(dux::StringFormat("%2$s %1$s", "aa", "bb") == "bb aa");

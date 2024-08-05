@@ -76,7 +76,7 @@ std::string StringFormatImpl(const char* format, va_list args) {
   va_copy(args2, args);
 
 #if defined(_WIN32)
-#define POSITIONAL_VSPRINTF _vsnprintf
+#define POSITIONAL_VSPRINTF _vsprintf_p
 #else
 #define POSITIONAL_VSPRINTF vsnprintf
 #endif

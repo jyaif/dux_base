@@ -15,6 +15,10 @@ std::unique_ptr<dux::Value> ToValue(int64_t const& src);
 [[nodiscard]] bool FromValue(dux::Value const* value, int32_t& dest);
 std::unique_ptr<dux::Value> ToValue(int32_t const& src);
 
+// bool
+[[nodiscard]] bool FromValue(dux::Value const* value, bool& dest);
+std::unique_ptr<dux::Value> ToValue(bool const& src);
+
 // std::string
 [[nodiscard]] bool FromValue(dux::Value const* value, std::string& dest);
 std::unique_ptr<dux::Value> ToValue(std::string const& src);

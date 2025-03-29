@@ -66,6 +66,7 @@ void TestValue() {
   TestToFromValueMap();
   TestToFromValueMap2();
   TestToFromValueVector();
+  TestAssignValueFromKeyIfAvailable();
 
   dux::Value v0(true);
   assert(v0.IsBool());
@@ -103,13 +104,19 @@ void TestValue() {
   auto& l = v6.GetList();
   l.push_back(std::make_unique<dux::Value>(43));
   l.push_back(std::move(v5));
+  l.push_back(std::make_unique<dux::Value>(false));
+  l.push_back(std::make_unique<dux::Value>(true));
   auto serialization2 = dux::Serialize(v6);
   auto v7 = dux::Deserialize(serialization2);
   auto& l2 = v7->GetList();
-  assert(l2.size() == 2);
+  assert(l2.size() == 4);
   assert(l2[0]->IsInt64());
   assert(l2[0]->GetInt64() == 43);
   assert(l2[1]->IsDictionary());
   assert(l2[1]->FindKeyOfType("key1", dux::Value::Type::STRING)->GetString() ==
          "value1");
+  assert(l2[2]->IsBool());
+  assert(l2[2]->GetBool() == false);
+  assert(l2[3]->IsBool());
+  assert(l2[3]->GetBool() == true);
 }

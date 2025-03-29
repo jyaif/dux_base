@@ -31,6 +31,21 @@ std::unique_ptr<dux::Value> ToValue(int32_t const& src) {
   return std::make_unique<dux::Value>(src);
 }
 
+[[nodiscard]] bool FromValue(dux::Value const* value, bool& dest) {
+  if (value == nullptr) {
+    return false;
+  }
+  if (!value->IsBool()) {
+    return false;
+  }
+  dest = value->GetBool();
+  return true;
+}
+
+std::unique_ptr<dux::Value> ToValue(bool const& src) {
+  return std::make_unique<dux::Value>(src);
+}
+
 [[nodiscard]] bool FromValue(dux::Value const* value, std::string& dest) {
   if (value == nullptr) {
     return false;

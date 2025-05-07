@@ -111,4 +111,19 @@ std::string StringFormat(const std::string_view format, ...) {
   return s;
 }
 
+std::string StringReplaceAll(const std::string& str,
+                             const std::string& find,
+                             const std::string& replace) {
+  std::string result;
+  size_t find_len = find.size();
+  size_t pos, from = 0;
+  while (std::string::npos != (pos = str.find(find, from))) {
+    result.append(str, from, pos - from);
+    result.append(replace);
+    from = pos + find_len;
+  }
+  result.append(str, from, std::string::npos);
+  return result;
+}
+
 }  // namespace dux

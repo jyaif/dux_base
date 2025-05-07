@@ -18,6 +18,11 @@ bool StartsWith(std::string_view full_string, std::string_view prefix);
 
 bool StringContainsString(std::string_view main_str, std::string_view substr);
 
+// In `str`, substitutes `find` by `replace`
+std::string StringReplaceAll(const std::string& str,
+                             const std::string& find,
+                             const std::string& replace);
+
 std::string StringFormat(const char* format, ...)
     __attribute__((__format__(__printf__, 1, 2)));
 std::string StringFormat(const std::string_view format, ...);

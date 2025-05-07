@@ -67,4 +67,10 @@ void TestStringUtils() {
   auto s3 = dux::SplitNewLines("aaaa\n\n\nbbb");
   assert(s3.size() == 4 && s3[0] == "aaaa" && s3[1] == "" && s3[2] == "" &&
          s3[3] == "bbb");
+
+  assert(dux::StringReplaceAll("", "a", "") == "");
+  assert(dux::StringReplaceAll("aa", "a", "") == "");
+  assert(dux::StringReplaceAll("aa", "a", "b") == "bb");
+  assert(dux::StringReplaceAll("aba", "a", "c") == "cbc");
+  assert(dux::StringReplaceAll("axybxycx_y", "xy", "wz") == "awzbwzcx_y");
 }

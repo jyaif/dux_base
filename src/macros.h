@@ -15,11 +15,12 @@
 // and compile with -Wthread-safety
 #if !OS_WINDOWS && _LIBCPP_ENABLE_THREAD_SAFETY_ANNOTATIONS
 #define GUARDED_BY(guard) __attribute__((guarded_by(guard)))
-#define EXCLUSIVE_LOCKS_REQUIRED(...) \
-  __attribute__((exclusive_locks_required(__VA_ARGS__)))
+#define REQUIRES(...) __attribute__((exclusive_locks_required(__VA_ARGS__)))
+#define EXCLUDES(...) __attribute__((locks_excluded(__VA_ARGS__)))
 #else
 #define GUARDED_BY(guard)
-#define EXCLUSIVE_LOCKS_REQUIRED(...)
+#define REQUIRES(...)
+#define EXCLUDES(...)
 #endif
 
 #endif  // DUX_BASE_SRC_MACROS_H_

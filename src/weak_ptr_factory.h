@@ -1,7 +1,9 @@
 #ifndef DUX_BASE_SRC_WEAK_PTR_FACTORY_H_
 #define DUX_BASE_SRC_WEAK_PTR_FACTORY_H_
 
+#include <cassert>
 #include <memory>
+#include "thread_checker.h"
 
 namespace dux {
 
@@ -11,6 +13,9 @@ class WeakPtr {
   WeakPtr(std::weak_ptr<std::unique_ptr<T>> ptr) : ptr_(ptr) {}
 
   T* Get() const {
+#if !defined(NDEBUG)
+    assert(thread_checker_.IsCreationThreadCurrent());
+#endif
     auto v = ptr_.lock();
     if (v)
       return v->get();
@@ -18,6 +23,9 @@ class WeakPtr {
   }
 
  private:
+#if !defined(NDEBUG)
+  ThreadChecker thread_checker_;
+#endif
   std::weak_ptr<std::unique_ptr<T>> ptr_;
 };
 

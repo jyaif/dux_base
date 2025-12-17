@@ -1,6 +1,7 @@
 #ifndef DUX_BASE_SRC_POOL_H_
 #define DUX_BASE_SRC_POOL_H_
 
+#include <limits>
 #include <memory>
 #include <vector>
 

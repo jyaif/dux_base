@@ -2,6 +2,7 @@
 #define DUX_BASE_SRC_RING_BUFFER_H_
 
 #include <array>
+#include <cstddef>
 
 namespace dux {
 

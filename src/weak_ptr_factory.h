@@ -14,6 +14,15 @@ class WeakPtr {
 
   WeakPtr() = default;
 
+  template <typename U>
+  friend class WeakPtr;
+
+  template <typename U>
+  WeakPtr(const WeakPtr<U>& other) : ptr_(other.ptr_) {
+    static_assert(std::is_convertible<U*, T*>::value,
+                  "Implicit conversion invalid: U must inherit from T");
+  }
+
   T* Get() const {
 #if !defined(NDEBUG)
     assert(thread_checker_.IsCreationThreadCurrent());

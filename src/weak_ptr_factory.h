@@ -10,37 +10,40 @@ namespace dux {
 template <class T>
 class WeakPtr {
  public:
-  WeakPtr(std::weak_ptr<std::unique_ptr<T>> ptr) : ptr_(ptr) {}
+  WeakPtr(std::weak_ptr<T> ptr) : ptr_(std::move(ptr)) {}
+
+  WeakPtr() = default;
 
   T* Get() const {
 #if !defined(NDEBUG)
     assert(thread_checker_.IsCreationThreadCurrent());
 #endif
-    auto v = ptr_.lock();
-    if (v)
-      return v->get();
-    return nullptr;
+    // If expired, lock returns null shared_ptr, get returns nullptr.
+    // If valid, lock returns valid shared_ptr, get returns T*.
+    return ptr_.lock().get();
   }
 
  private:
 #if !defined(NDEBUG)
   ThreadChecker thread_checker_;
 #endif
-  std::weak_ptr<std::unique_ptr<T>> ptr_;
+  std::weak_ptr<T> ptr_;
 };
 
 template <class T>
 class WeakPtrFactory {
  public:
-  WeakPtrFactory(T* object) {
-    std::unique_ptr<T> temp(object);
-    object_ = std::make_shared<std::unique_ptr<T>>(std::move(temp));
+  explicit WeakPtrFactory(T* object) {
+    // Create a shared_ptr that points to 'object'.
+    // We pass a no-op deleter [](T*){} so that when this shared_ptr
+    // dies, it does NOT delete the underlying object.
+    ptr_.reset(object, [](T*) {});
   }
-  ~WeakPtrFactory() { object_.get()->release(); }
-  WeakPtr<T> GetWeak() { return WeakPtr<T>(object_); }
+
+  WeakPtr<T> GetWeak() { return WeakPtr<T>(ptr_); }
 
  private:
-  std::shared_ptr<std::unique_ptr<T>> object_;
+  std::shared_ptr<T> ptr_;
 };
 
 }  // namespace dux

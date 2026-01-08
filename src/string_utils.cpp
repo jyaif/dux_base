@@ -76,11 +76,10 @@ std::string StringFormatImpl(const char* format, va_list args) {
   va_copy(args2, args);
 
 #if defined(_WIN32)
-#define POSITIONAL_VSPRINTF _vsprintf_p
+  size_t size = _vscprintf_p(format, args);
 #else
-#define POSITIONAL_VSPRINTF vsnprintf
+  size_t size = vsnprintf(nullptr, 0, format, args);
 #endif
-  size_t size = POSITIONAL_VSPRINTF(nullptr, 0, format, args);
   size++;  // Extra space for '\0'
   if (size == 0) {
     va_end(args2);
@@ -88,7 +87,11 @@ std::string StringFormatImpl(const char* format, va_list args) {
   }
 
   std::unique_ptr<char[]> buf(new char[size]);
-  POSITIONAL_VSPRINTF(buf.get(), size, format, args2);
+#if defined(_WIN32)
+  _vsprintf_p(buf.get(), size, format, args2);
+#else
+  vsnprintf(buf.get(), size, format, args2);
+#endif
   va_end(args2);
   return std::string(buf.get(),
                      buf.get() + size - 1  // We don't want the '\0' inside
